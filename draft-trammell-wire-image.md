@@ -63,9 +63,9 @@ protocol participants can interact with that protocol.
 
 Several documents currently under discussion in IETF working groups and the
 IETF in general, for example
-{{?QUIC-MANAGEABILITY:I-D.ietf-quic-manageability}},
-{{?EFFECT-ENCRYPT:I-D.mm-effect-encrypt}}, and
-{{?TRANSPORT-ENCRYPT:I-D.ietf-fairhurst-tsvwg-transport-encrypt}}, discuss in
+{{?QUIC-MANAGEABILITY=I-D.ietf-quic-manageability}},
+{{?EFFECT-ENCRYPT=I-D.mm-wg-effect-encrypt}}, and
+{{?TRANSPORT-ENCRYPT=I-D.fairhurst-tsvwg-transport-encrypt}}, discuss in
 part impacts on the third-party use of wire images caused by a migration from
 protocols whose wire images are largely not confidentiality protected (e.g.
 HTTP over TCP) to protocols whose wire images are confidentiality protected
@@ -132,9 +132,22 @@ Intermediate systems with knowledge of the protocol semantics in the readable
 portion of the wire image can also purposely delay or drop packets in order to
 affect the protocol's operation.
 
-## Engineering the Wire Image 
+## Engineering the Wire Image
 
-\[EDITOR'S NOTE mirja's point "the network will ossify everything not locked down" goes here.]
+We note that understanding the nature of a protocol's wire image allows it to
+be engineered. The general principle at work here, observed through experience
+with deployability and non-deployability of protocols at the network and
+transport layers in the Internet, is that all observable parts of a protocol's
+wire image will eventually ossify, and become difficult or impossible to
+change in future extensions or revisions of the protocol.
+
+A network function which serves a purpose useful to its deployer will use the
+information it needs from the wire image, and will tend to get that
+information from the wire image in the simplest way possible. A protocol's
+wire image should therefore be explicitly designed to explicitly expose
+information to those network functions in an obvious way, and to expose as
+little other information as possible.
+
 
 
 # Acknowledgments
