@@ -59,7 +59,7 @@ confidentiality-protected can be unambiguously interpreted by those observers.
 This information comprises the protocol's wire image, which we define and
 discuss in this document. It is the wire image, not the protocol's
 specification, that determines how third parties on the network paths among
-protocol participants can interact with that protocol.
+protocol participants will interact with that protocol.
 
 Several documents currently under discussion in IETF working groups and the
 IETF in general, for example
@@ -118,17 +118,18 @@ path with devices that understand the semantics of the protocol's wire image
 can modify it, in order to induce behaviors at the protocol's participants.
 This is the case with TCP in the modern Internet.
 
-Adding end-to-end integrity protection to portions of the wire image makes
-those portions nonwritable. Nonwritable portions of the wire image may be
-observed by on-path devices, but not changed.
+Adding end-to-end integrity protection to portions of the wire image makes it
+impossible for on-path devices to modify them without detection by the
+endpoints, which can then take action in response to those modifications,
+making these portions of the wire image effectively immutable.
 
-Note that a protocol's wire image cannot be made completely nonwritable in a
-packet-switched network: the observed delay sequence is modified as packets
+Note that a protocol's wire image cannot be made completely immutable in a
+packet-switched network. The observed delay sequence is modified as packets
 move through the network and experience different delays on different links,
-packets may always be dropped, as a consequence of the network's operation.
-Intermediate systems with knowledge of the protocol semantics in the readable
-portion of the wire image can also purposely delay or drop packets in order to
-affect the protocol's operation.
+and packets may be dropped at any time, as a consequence of the network's
+operation. Intermediate systems with knowledge of the protocol semantics in
+the readable portion of the wire image can also purposely delay or drop
+packets in order to affect the protocol's operation.
 
 ## Engineering the Wire Image
 
@@ -145,8 +146,6 @@ information from the wire image in the simplest way possible. A protocol's
 wire image should therefore be explicitly designed to explicitly expose
 information to those network functions in an obvious way, and to expose as
 little other information as possible.
-
-
 
 # Acknowledgments
 
