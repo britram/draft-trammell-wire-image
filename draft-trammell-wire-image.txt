@@ -5,7 +5,7 @@
 Network Working Group                                        B. Trammell
 Internet-Draft                                             M. Kuehlewind
 Intended status: Informational                                ETH Zurich
-Expires: May 19, 2018                                  November 15, 2017
+Expires: May 20, 2018                                  November 16, 2017
 
 
                   The Wire Image of a Network Protocol
@@ -34,7 +34,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on May 19, 2018.
+   This Internet-Draft will expire on May 20, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Trammell & Kuehlewind     Expires May 19, 2018                  [Page 1]
+Trammell & Kuehlewind     Expires May 20, 2018                  [Page 1]
 
 Internet-Draft                 Wire Image                  November 2017
 
@@ -92,14 +92,10 @@ Internet-Draft                 Wire Image                  November 2017
 
 2.  Definition
 
-   More formally, the wire image of a protocol consists of:
-
-   1.  The sequence of messages sent by each participant in the
-       protocol, each expressed as a sequence of bits with an associated
-       arbitrary-precision time at which it was sent.
-
-   2.  The vectore of the values of any arbitrary set of functions
-       applied to the sequence (1) above.
+   More formally, the wire image of a protocol consists of the sequence
+   of messages sent by each participant in the protocol, each expressed
+   as a sequence of bits with an associated arbitrary-precision time at
+   which it was sent.
 
 3.  Discussion
 
@@ -107,16 +103,17 @@ Internet-Draft                 Wire Image                  November 2017
    analysis, but it does illustrate some important properties of the
    wire image:
 
+   o  The wire image is not limited to merely "the unencrypted bits in
+      the header".  In particular, timing, size, and sequence
+      information can be used to infer other parameters of the behavior
 
 
-Trammell & Kuehlewind     Expires May 19, 2018                  [Page 2]
+
+Trammell & Kuehlewind     Expires May 20, 2018                  [Page 2]
 
 Internet-Draft                 Wire Image                  November 2017
 
 
-   o  The wire image is not limited to merely "the unencrypted bits in
-      the header".  In particular, timing, size, and sequence
-      information can be used to infer other parameters of the behavior
       of the protocol, or to fingerprint protocols and/or specific
       implmentations of the protocol.
 
@@ -165,7 +162,10 @@ Internet-Draft                 Wire Image                  November 2017
 
 
 
-Trammell & Kuehlewind     Expires May 19, 2018                  [Page 3]
+
+
+
+Trammell & Kuehlewind     Expires May 20, 2018                  [Page 3]
 
 Internet-Draft                 Wire Image                  November 2017
 
@@ -221,7 +221,7 @@ Internet-Draft                 Wire Image                  November 2017
 
 
 
-Trammell & Kuehlewind     Expires May 19, 2018                  [Page 4]
+Trammell & Kuehlewind     Expires May 20, 2018                  [Page 4]
 
 Internet-Draft                 Wire Image                  November 2017
 
@@ -277,4 +277,4 @@ Authors' Addresses
 
 
 
-Trammell & Kuehlewind     Expires May 19, 2018                  [Page 5]
+Trammell & Kuehlewind     Expires May 20, 2018                  [Page 5]
