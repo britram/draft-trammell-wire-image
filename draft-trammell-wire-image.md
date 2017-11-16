@@ -76,13 +76,11 @@ shed some light on these discussions.
 
 # Definition
 
-More formally, the wire image of a protocol consists of:
+More formally, the wire image of a protocol consists of the sequence of
+messages sent by each participant in the protocol, each expressed as a
+sequence of bits with an associated arbitrary-precision time at which it was
+sent.
 
-1. The sequence of messages sent by each participant in the protocol, each
-   expressed as a sequence of bits with an associated arbitrary-precision time
-   at which it was sent.
-2. The vectore of the values of any arbitrary set of functions applied to the
-   sequence (1) above.
 
 # Discussion
 
