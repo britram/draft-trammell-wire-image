@@ -143,9 +143,15 @@ change in future extensions or revisions of the protocol.
 A network function which serves a purpose useful to its deployer will use the
 information it needs from the wire image, and will tend to get that
 information from the wire image in the simplest way possible. A protocol's
-wire image should therefore be explicitly designed to explicitly expose
+wire image should therefore be designed to explicitly expose
 information to those network functions in an obvious way, and to expose as
 little other information as possible.
+
+However, even if information is explicitly provided to the network, any
+information that is exposed by the wire image even if not intended
+to be consumed by an observer, e.g. information is needed in clear
+to realize confidentiality and protection, must be designed carefully 
+as it might ossify, making it inmutable for future version of the protocol.
 
 # Acknowledgments
 
