@@ -249,7 +249,7 @@ Authors' Addresses
    8092 Zurich
    Switzerland
 
-   Email: ietf@trammell.ch
+   Email: mirja.kuehlewind@tik.ee.ethz.ch
 
 
 
