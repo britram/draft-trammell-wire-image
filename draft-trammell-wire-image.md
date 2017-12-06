@@ -81,22 +81,30 @@ messages sent by each participant in the protocol, each expressed as a
 sequence of bits with an associated arbitrary-precision time at which it was
 sent.
 
-
 # Discussion
 
 This definition is so vague as to be difficult to apply to protocol analysis,
-but it does illustrate some important properties of the wire image:
+but it does illustrate some important properties of the wire image.
 
-- The wire image is not limited to merely "the unencrypted bits in the
-  header". In particular, timing, size, and sequence information can be used
-  to infer other parameters of the behavior of the protocol, or to fingerprint
-  protocols and/or specific implmentations of the protocol.
+Key is that the wire image is not limited to merely "the unencrypted bits in the
+header". In particular, interpacket timing, packet size, and message sequence
+information can be used to infer other parameters of the behavior of the
+protocol, or to fingerprint protocols and/or specific implementations of the
+protocol; see {{time-and-size}}.
 
-- The wire image is multidimensional. This implies that the name "image" is
-  not merely metaphorical, and that general image recognition techniques can
-  be applied to extracting paterns and information from it.
+An important implication of this property is that a protocol which uses
+confidentiality protection for the headers it needs to operate can be
+deliberately designed to have a specified wire image that is separate from
+that machinery; see {{engineering}}. Note that this is a capability unique to
+encrypted protocols. Parts of a wire image may also be made visible to devices
+on path, but immutable through end-to-end integrity protection; see
+{{integrity}}.
 
-## Obscuring timing and sizing information
+Note also that the wire image is multidimensional. This implies that the name
+"image" is not merely metaphorical, and that general image recognition
+techniques may be applicable to extracting paterns and information from it.
+
+## Obscuring timing and sizing information {#time-and-size}
 
 Cryptography can protect the confidentiality of a protocol's headers, to the
 extent that forwarding devices do not need the confidentiality-protected
@@ -105,11 +113,11 @@ protecting non-header information in the wire image. Of particular interest is
 the sequence of packet sizes and the sequence of packet times. These are
 characteristic of the operation of the protocol. A sender may use padding to
 increase the size of packets, and inject delay into sending in order to
-increase delay components, however it does this as the expense of bandwidth
+increase delay components. However it does this as the expense of bandwidth
 efficiency and latency. This technique is therefore limited to the tolerance
 for inefficiency and latency of the application.
 
-## Integrity Protection of the Wire Image
+## Integrity Protection of the Wire Image {#integrity}
 
 Portions of the wire image of a protocol that are neither
 confidentiality-protected nor integrity-protected are writable by devices on a
@@ -121,17 +129,22 @@ This is the case with TCP in the modern Internet.
 Adding end-to-end integrity protection to portions of the wire image makes it
 impossible for on-path devices to modify them without detection by the
 endpoints, which can then take action in response to those modifications,
-making these portions of the wire image effectively immutable.
+making these portions of the wire image effectively immutable. However, they
+can still be observed by devices on path.
 
-Note that a protocol's wire image cannot be made completely immutable in a
-packet-switched network. The observed delay sequence is modified as packets
-move through the network and experience different delays on different links,
-and packets may be dropped at any time, as a consequence of the network's
-operation. Intermediate systems with knowledge of the protocol semantics in
-the readable portion of the wire image can also purposely delay or drop
-packets in order to affect the protocol's operation.
+Note that a protocol's visible wire image cannot be made completely immutable
+in a packet-switched network. Interarrival timings, for instance, cannot be
+easily protected, as the observable delay sequence is modified as packets move
+through the network and experience different delays on different links.
+Message sequences are also not practically protectable, as packets may be
+dropped or reordered at any point in the network, as a consequence of the
+network's operation.
 
-## Engineering the Wire Image
+Intermediate systems with knowledge of the protocol semantics in the readable
+portion of the wire image can also purposely delay or drop packets in order to
+affect the protocol's operation.
+
+## Engineering the Wire Image {#engineering}
 
 We note that understanding the nature of a protocol's wire image allows it to
 be engineered. The general principle at work here, observed through experience
