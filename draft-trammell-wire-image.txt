@@ -5,7 +5,7 @@
 Network Working Group                                        B. Trammell
 Internet-Draft                                             M. Kuehlewind
 Intended status: Informational                                ETH Zurich
-Expires: June 9, 2018                                  December 06, 2017
+Expires: June 10, 2018                                 December 07, 2017
 
 
                   The Wire Image of a Network Protocol
@@ -34,7 +34,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 9, 2018.
+   This Internet-Draft will expire on June 10, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Trammell & Kuehlewind     Expires June 9, 2018                  [Page 1]
+Trammell & Kuehlewind     Expires June 10, 2018                 [Page 1]
 
 Internet-Draft                 Wire Image                  December 2017
 
@@ -109,7 +109,7 @@ Internet-Draft                 Wire Image                  December 2017
 
 
 
-Trammell & Kuehlewind     Expires June 9, 2018                  [Page 2]
+Trammell & Kuehlewind     Expires June 10, 2018                 [Page 2]
 
 Internet-Draft                 Wire Image                  December 2017
 
@@ -126,6 +126,15 @@ Internet-Draft                 Wire Image                  December 2017
    also be made visible to devices on path, but immutable through end-
    to-end integrity protection; see Section 3.2.
 
+   Portions of the wire image of a protocol that are neither
+   confidentiality-protected nor integrity-protected are writable by
+   devices on the path(s) between the endpoints using the protocol.  A
+   protocol with a wire image that is largely writable operating over a
+   path with devices that understand the semantics of the protocol's
+   wire image can modify it, in order to induce behaviors at the
+   protocol's participants.  This is the case with TCP in the current
+   Internet.
+
    Note also that the wire image is multidimensional.  This implies that
    the name "image" is not merely metaphorical, and that general image
    recognition techniques may be applicable to extracting paterns and
@@ -139,59 +148,55 @@ Internet-Draft                 Wire Image                  December 2017
    operations.  However, it cannot be applied to protecting non-header
    information in the wire image.  Of particular interest is the
    sequence of packet sizes and the sequence of packet times.  These are
-   characteristic of the operation of the protocol.  A sender may use
-   padding to increase the size of packets, and inject delay into
-   sending in order to increase delay components.  However it does this
-   as the expense of bandwidth efficiency and latency.  This technique
-   is therefore limited to the tolerance for inefficiency and latency of
-   the application.
+   characteristic of the operation of the protocol.  While packets
+   cannot be made smaller than their information content, nor sent
+   faster than processing time requirements at the sender allow, a
+   sender may use padding to increase the size of packets, and add delay
+   to transmission scheduling in order to increase interpacket delay.
+   However, it does this as the expense of bandwidth efficiency and
+   latency, so this technique is limited to the application's tolerance
+   for latency and bandwidth inefficiency.
 
 3.2.  Integrity Protection of the Wire Image
-
-   Portions of the wire image of a protocol that are neither
-   confidentiality-protected nor integrity-protected are writable by
-   devices on a path.  A protocol with a wire image that is largely
-   writable operating over a path with devices that understand the
-   semantics of the protocol's wire image can modify it, in order to
-   induce behaviors at the protocol's participants.  This is the case
-   with TCP in the modern Internet.
 
    Adding end-to-end integrity protection to portions of the wire image
    makes it impossible for on-path devices to modify them without
    detection by the endpoints, which can then take action in response to
-   those modifications, making these portions of the wire image
-   effectively immutable.  However, they can still be observed by
-   devices on path.
 
 
 
-Trammell & Kuehlewind     Expires June 9, 2018                  [Page 3]
+Trammell & Kuehlewind     Expires June 10, 2018                 [Page 3]
 
 Internet-Draft                 Wire Image                  December 2017
 
 
-   Note that a protocol's visible wire image cannot be made completely
-   immutable in a packet-switched network.  Interarrival timings, for
-   instance, cannot be easily protected, as the observable delay
-   sequence is modified as packets move through the network and
-   experience different delays on different links.  Message sequences
-   are also not practically protectable, as packets may be dropped or
-   reordered at any point in the network, as a consequence of the
-   network's operation.
+   those modifications, making these portions of the wire image
+   effectively immutable.  However, they can still be observed by
+   devices on path.  This allows the creation of signals intended by the
+   endpoints solely for the consumption of these on-path devices.
 
-   Intermediate systems with knowledge of the protocol semantics in the
-   readable portion of the wire image can also purposely delay or drop
-   packets in order to affect the protocol's operation.
+   Integrity protection can only practically be applied to the sequence
+   of bits in each packet, which implies that a protocol's visible wire
+   image cannot be made completely immutable in a packet-switched
+   network.  Interarrival timings, for instance, cannot be easily
+   protected, as the observable delay sequence is modified as packets
+   move through the network and experience different delays on different
+   links.  Message sequences are also not practically protectable, as
+   packets may be dropped or reordered at any point in the network, as a
+   consequence of the network's operation.  Intermediate systems with
+   knowledge of the protocol semantics in the readable portion of the
+   wire image can also purposely delay or drop packets in order to
+   affect the protocol's operation.
 
 3.3.  Engineering the Wire Image
 
-   We note that understanding the nature of a protocol's wire image
-   allows it to be engineered.  The general principle at work here,
-   observed through experience with deployability and non-deployability
-   of protocols at the network and transport layers in the Internet, is
-   that all observable parts of a protocol's wire image will eventually
-   ossify, and become difficult or impossible to change in future
-   extensions or revisions of the protocol.
+   Understanding the nature of a protocol's wire image allows it to be
+   engineered.  The general principle at work here, observed through
+   experience with deployability and non-deployability of protocols at
+   the network and transport layers in the Internet, is that all
+   observable parts of a protocol's wire image will eventually ossify,
+   and become difficult or impossible to change in future extensions or
+   revisions of the protocol.
 
    A network function which serves a purpose useful to its deployer will
    use the information it needs from the wire image, and will tend to
@@ -202,14 +207,36 @@ Internet-Draft                 Wire Image                  December 2017
 
    However, even when information is explicitly provided to the network,
    any information that is exposed by the wire image, even that
-   informaiton not intended to be consumed by an observer, must be
+   information not intended to be consumed by an observer, must be
    designed carefully as it might ossify, making it immutable for future
    versions of the protocol.  For example, information needed to support
    decryption by the receiving endpoint (cryptographic handshakes,
    sequence numbers, and so on) may be used by the path for its own
    purposes.
 
+   Since they are separate from the signals that drive an encrypted
+   protocol's mechanisms, the veracity of integrity-protected signals in
+   an engineered wire image intended for consumption by the path may not
+   be verifiable by on-path devices; see [I-D.hardie-path-signals].
+
+
+
+Trammell & Kuehlewind     Expires June 10, 2018                 [Page 4]
+
+Internet-Draft                 Wire Image                  December 2017
+
+
+   Indeed, any two endpoints with a secret channel between them (in this
+   case, the encrypted protocol itself) may collude to change the
+   semantics and information content of these signals.  This is an
+   unavoidable consequence of the separation of the wire image from the
+   protocol's operation afforded by confidentiality protection of the
+   protocol's headers.
+
 4.  Acknowledgments
+
+   Thanks to Martin Thomson and Thomas Fossati for discussions that have
+   improved this document.
 
    This work is partially supported by the European Commission under
    Horizon 2020 grant agreement no. 688421 Measurement and Architecture
@@ -217,21 +244,16 @@ Internet-Draft                 Wire Image                  December 2017
    for Education, Research, and Innovation under contract no. 15.0268.
    This support does not imply endorsement.
 
-
-
-
-
-Trammell & Kuehlewind     Expires June 9, 2018                  [Page 4]
-
-Internet-Draft                 Wire Image                  December 2017
-
-
 5.  Informative References
 
    [EFFECT-ENCRYPT]
               Moriarty, K. and A. Morton, "Effect of Pervasive
               Encryption on Operators", draft-mm-wg-effect-encrypt-13
               (work in progress), October 2017.
+
+   [I-D.hardie-path-signals]
+              Hardie, T., "Path signals", draft-hardie-path-signals-02
+              (work in progress), November 2017.
 
    [QUIC-MANAGEABILITY]
               Kuehlewind, M. and B. Trammell, "Manageability of the QUIC
@@ -245,6 +267,20 @@ Internet-Draft                 Wire Image                  December 2017
               (work in progress), September 2017.
 
 Authors' Addresses
+
+
+
+
+
+
+
+
+
+
+Trammell & Kuehlewind     Expires June 10, 2018                 [Page 5]
+
+Internet-Draft                 Wire Image                  December 2017
+
 
    Brian Trammell
    ETH Zurich
@@ -277,4 +313,24 @@ Authors' Addresses
 
 
 
-Trammell & Kuehlewind     Expires June 9, 2018                  [Page 5]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Trammell & Kuehlewind     Expires June 10, 2018                 [Page 6]
