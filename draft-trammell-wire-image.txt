@@ -217,7 +217,7 @@ Internet-Draft                 Wire Image                  December 2017
    Since they are separate from the signals that drive an encrypted
    protocol's mechanisms, the veracity of integrity-protected signals in
    an engineered wire image intended for consumption by the path may not
-   be verifiable by on-path devices; see [I-D.hardie-path-signals].
+   be verifiable by on-path devices; see [PATH-SIGNALS].  Indeed, any
 
 
 
@@ -226,12 +226,12 @@ Trammell & Kuehlewind     Expires June 10, 2018                 [Page 4]
 Internet-Draft                 Wire Image                  December 2017
 
 
-   Indeed, any two endpoints with a secret channel between them (in this
-   case, the encrypted protocol itself) may collude to change the
-   semantics and information content of these signals.  This is an
-   unavoidable consequence of the separation of the wire image from the
-   protocol's operation afforded by confidentiality protection of the
-   protocol's headers.
+   two endpoints with a secret channel between them (in this case, the
+   encrypted protocol itself) may collude to change the semantics and
+   information content of these signals.  This is an unavoidable
+   consequence of the separation of the wire image from the protocol's
+   operation afforded by confidentiality protection of the protocol's
+   headers.
 
 4.  Acknowledgments
 
@@ -251,7 +251,7 @@ Internet-Draft                 Wire Image                  December 2017
               Encryption on Operators", draft-mm-wg-effect-encrypt-13
               (work in progress), October 2017.
 
-   [I-D.hardie-path-signals]
+   [PATH-SIGNALS]
               Hardie, T., "Path signals", draft-hardie-path-signals-02
               (work in progress), November 2017.
 
