@@ -5,7 +5,7 @@
 Network Working Group                                        B. Trammell
 Internet-Draft                                             M. Kuehlewind
 Intended status: Informational                                ETH Zurich
-Expires: June 10, 2018                                 December 07, 2017
+Expires: August 25, 2018                               February 21, 2018
 
 
                   The Wire Image of a Network Protocol
@@ -15,9 +15,9 @@ Abstract
 
    This document defines the wire image, an abstraction of the
    information available to an on-path non-participant in a networking
-   protocol.  This abstraction is intended to shed light on current
-   discussions within the IETF on the implications on increased
-   encryption has for network functions that use the wire image.
+   protocol.  This abstraction is intended to shed light on the
+   implications on increased encryption has for network functions that
+   use the wire image.
 
 Status of This Memo
 
@@ -34,11 +34,11 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on June 10, 2018.
+   This Internet-Draft will expire on August 25, 2018.
 
 Copyright Notice
 
-   Copyright (c) 2017 IETF Trust and the persons identified as the
+   Copyright (c) 2018 IETF Trust and the persons identified as the
    document authors.  All rights reserved.
 
    This document is subject to BCP 78 and the IETF Trust's Legal
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Trammell & Kuehlewind     Expires June 10, 2018                 [Page 1]
+Trammell & Kuehlewind    Expires August 25, 2018                [Page 1]
 
-Internet-Draft                 Wire Image                  December 2017
+Internet-Draft                 Wire Image                  February 2018
 
 
 1.  Introduction
@@ -109,9 +109,9 @@ Internet-Draft                 Wire Image                  December 2017
 
 
 
-Trammell & Kuehlewind     Expires June 10, 2018                 [Page 2]
+Trammell & Kuehlewind    Expires August 25, 2018                [Page 2]
 
-Internet-Draft                 Wire Image                  December 2017
+Internet-Draft                 Wire Image                  February 2018
 
 
    parameters of the behavior of the protocol, or to fingerprint
@@ -137,7 +137,7 @@ Internet-Draft                 Wire Image                  December 2017
 
    Note also that the wire image is multidimensional.  This implies that
    the name "image" is not merely metaphorical, and that general image
-   recognition techniques may be applicable to extracting paterns and
+   recognition techniques may be applicable to extracting patterns and
    information from it.
 
 3.1.  Obscuring timing and sizing information
@@ -165,9 +165,9 @@ Internet-Draft                 Wire Image                  December 2017
 
 
 
-Trammell & Kuehlewind     Expires June 10, 2018                 [Page 3]
+Trammell & Kuehlewind    Expires August 25, 2018                [Page 3]
 
-Internet-Draft                 Wire Image                  December 2017
+Internet-Draft                 Wire Image                  February 2018
 
 
    those modifications, making these portions of the wire image
@@ -194,16 +194,52 @@ Internet-Draft                 Wire Image                  December 2017
    engineered.  The general principle at work here, observed through
    experience with deployability and non-deployability of protocols at
    the network and transport layers in the Internet, is that all
-   observable parts of a protocol's wire image will eventually ossify,
-   and become difficult or impossible to change in future extensions or
-   revisions of the protocol.
+   observable parts of a protocol's wire image will eventually be used
+   by devices on path; consequently, changes or future extensions that
+   affect the observable part of the wire image become difficult or
+   impossible to deploy.
 
    A network function which serves a purpose useful to its deployer will
    use the information it needs from the wire image, and will tend to
    get that information from the wire image in the simplest way
-   possible.  A protocol's wire image should therefore be designed to
-   explicitly expose information to those network functions in an
-   obvious way, and to expose as little other information as possible.
+   possible.
+
+   For example, consider the case of the ubiquitous TCP [RFC0793]
+   transport protocol.  As described in [PATH-SIGNALS], several key in-
+   network functions have evolved to take advantage of implicit signals
+   in TCP's wire image, which, as TCP provides neither integrity or
+   confidentiality protection for its headers, is inseparable from ints
+   internal operation.  Some of these include:
+
+   o  Determining return routability and consent: For example, TCP's
+      wire image contains both an implicit indication that the sender of
+      a packet is at least on the path toward its source address (in the
+      acknowledgement number during the handshake), as well as an
+      implicit indication that a receiving device consents to continue
+      communication.  These are used by stateful network firewalls.
+
+
+
+
+Trammell & Kuehlewind    Expires August 25, 2018                [Page 4]
+
+Internet-Draft                 Wire Image                  February 2018
+
+
+   o  Measuring loss and latency: For example, examining the sequence of
+      TCP's sequence and acknowledgement numbers, as well as the ECN
+      [RFC3168] control bits allows the inference of congestion, loss
+      and retransmission along the path.  The sequence and
+      acknowledgement numbers together with the timestamp option
+      [RFC7323] allow the measurement of application-experienced
+      latency.
+
+   During the design of a protocol, the utility of features such as
+   these shoud be considered, and the protocol's wire image should
+   therefore be designed to explicitly expose information to those
+   network functions deemed important by the designers in an obvious
+   way.  The wire image should expose as little other information as
+   possible.
 
    However, even when information is explicitly provided to the network,
    any information that is exposed by the wire image, even that
@@ -211,21 +247,13 @@ Internet-Draft                 Wire Image                  December 2017
    designed carefully as it might ossify, making it immutable for future
    versions of the protocol.  For example, information needed to support
    decryption by the receiving endpoint (cryptographic handshakes,
-   sequence numbers, and so on) may be used by the path for its own
-   purposes.
+   sequence numbers, and so on) may be used by devices along the path
+   for their own purposes.
 
    Since they are separate from the signals that drive an encrypted
    protocol's mechanisms, the veracity of integrity-protected signals in
    an engineered wire image intended for consumption by the path may not
    be verifiable by on-path devices; see [PATH-SIGNALS].  Indeed, any
-
-
-
-Trammell & Kuehlewind     Expires June 10, 2018                 [Page 4]
-
-Internet-Draft                 Wire Image                  December 2017
-
-
    two endpoints with a secret channel between them (in this case, the
    encrypted protocol itself) may collude to change the semantics and
    information content of these signals.  This is an unavoidable
@@ -235,8 +263,8 @@ Internet-Draft                 Wire Image                  December 2017
 
 4.  Acknowledgments
 
-   Thanks to Martin Thomson and Thomas Fossati for discussions that have
-   improved this document.
+   Thanks to Martin Thomson, Thomas Fossati, and Ted Hardie for
+   discussions that have improved this document.
 
    This work is partially supported by the European Commission under
    Horizon 2020 grant agreement no. 688421 Measurement and Architecture
@@ -244,12 +272,22 @@ Internet-Draft                 Wire Image                  December 2017
    for Education, Research, and Innovation under contract no. 15.0268.
    This support does not imply endorsement.
 
+
+
+
+
+
+Trammell & Kuehlewind    Expires August 25, 2018                [Page 5]
+
+Internet-Draft                 Wire Image                  February 2018
+
+
 5.  Informative References
 
    [EFFECT-ENCRYPT]
-              Moriarty, K. and A. Morton, "Effect of Pervasive
-              Encryption on Operators", draft-mm-wg-effect-encrypt-13
-              (work in progress), October 2017.
+              Moriarty, K. and A. Morton, "Effects of Pervasive
+              Encryption on Operators", draft-mm-wg-effect-encrypt-21
+              (work in progress), February 2018.
 
    [PATH-SIGNALS]
               Hardie, T., "Path signals", draft-hardie-path-signals-02
@@ -260,27 +298,27 @@ Internet-Draft                 Wire Image                  December 2017
               Transport Protocol", draft-ietf-quic-manageability-01
               (work in progress), October 2017.
 
+   [RFC0793]  Postel, J., "Transmission Control Protocol", STD 7,
+              RFC 793, DOI 10.17487/RFC0793, September 1981,
+              <https://www.rfc-editor.org/info/rfc793>.
+
+   [RFC3168]  Ramakrishnan, K., Floyd, S., and D. Black, "The Addition
+              of Explicit Congestion Notification (ECN) to IP",
+              RFC 3168, DOI 10.17487/RFC3168, September 2001,
+              <https://www.rfc-editor.org/info/rfc3168>.
+
+   [RFC7323]  Borman, D., Braden, B., Jacobson, V., and R.
+              Scheffenegger, Ed., "TCP Extensions for High Performance",
+              RFC 7323, DOI 10.17487/RFC7323, September 2014,
+              <https://www.rfc-editor.org/info/rfc7323>.
+
    [TRANSPORT-ENCRYPT]
               Fairhurst, G. and C. Perkins, "The Impact of Transport
-              Header Encryption on Operation and Evolution of the
-              Internet", draft-fairhurst-tsvwg-transport-encrypt-04
-              (work in progress), September 2017.
+              Header Confidentiality on Network Operation and Evolution
+              of the Internet", draft-fairhurst-tsvwg-transport-
+              encrypt-06 (work in progress), February 2018.
 
 Authors' Addresses
-
-
-
-
-
-
-
-
-
-
-Trammell & Kuehlewind     Expires June 10, 2018                 [Page 5]
-
-Internet-Draft                 Wire Image                  December 2017
-
 
    Brian Trammell
    ETH Zurich
@@ -289,6 +327,15 @@ Internet-Draft                 Wire Image                  December 2017
    Switzerland
 
    Email: ietf@trammell.ch
+
+
+
+
+
+
+Trammell & Kuehlewind    Expires August 25, 2018                [Page 6]
+
+Internet-Draft                 Wire Image                  February 2018
 
 
    Mirja Kuehlewind
@@ -333,4 +380,13 @@ Internet-Draft                 Wire Image                  December 2017
 
 
 
-Trammell & Kuehlewind     Expires June 10, 2018                 [Page 6]
+
+
+
+
+
+
+
+
+
+Trammell & Kuehlewind    Expires August 25, 2018                [Page 7]

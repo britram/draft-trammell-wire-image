@@ -291,9 +291,9 @@ address {
 
   <meta name="dct.creator" content="Trammell, B. and M. Kuehlewind" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-trammell-wire-image-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2017-12-07" />
-  <meta name="dct.abstract" content="This document defines the wire image, an abstraction of the information available to an on-path non-participant in a networking protocol. This abstraction is intended to shed light on current discussions within the IETF on the implications on increased encryption has for network functions that use the wire image." />
-  <meta name="description" content="This document defines the wire image, an abstraction of the information available to an on-path non-participant in a networking protocol. This abstraction is intended to shed light on current discussions within the IETF on the implications on increased encryption has for network functions that use the wire image." />
+  <meta name="dct.issued" scheme="ISO8601" content="2018-2-21" />
+  <meta name="dct.abstract" content="This document defines the wire image, an abstraction of the information available to an on-path non-participant in a networking protocol. This abstraction is intended to shed light on the implications on increased encryption has for network functions that use the wire image." />
+  <meta name="description" content="This document defines the wire image, an abstraction of the information available to an on-path non-participant in a networking protocol. This abstraction is intended to shed light on the implications on increased encryption has for network functions that use the wire image." />
 
 </head>
 
@@ -315,8 +315,8 @@ address {
 <td class="right">ETH Zurich</td>
 </tr>
 <tr>
-<td class="left">Expires: June 10, 2018</td>
-<td class="right">December 07, 2017</td>
+<td class="left">Expires: August 25, 2018</td>
+<td class="right">February 21, 2018</td>
 </tr>
 
     	
@@ -327,14 +327,14 @@ address {
   <span class="filename">draft-trammell-wire-image-latest</span></p>
   
   <h1 id="rfc.abstract"><a href="#rfc.abstract">Abstract</a></h1>
-<p>This document defines the wire image, an abstraction of the information available to an on-path non-participant in a networking protocol. This abstraction is intended to shed light on current discussions within the IETF on the implications on increased encryption has for network functions that use the wire image.</p>
+<p>This document defines the wire image, an abstraction of the information available to an on-path non-participant in a networking protocol. This abstraction is intended to shed light on the implications on increased encryption has for network functions that use the wire image.</p>
 <h1 id="rfc.status"><a href="#rfc.status">Status of This Memo</a></h1>
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on June 10, 2018.</p>
+<p>This Internet-Draft will expire on August 25, 2018.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
-<p>Copyright (c) 2017 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
+<p>Copyright (c) 2018 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
 <h1 id="rfc.section.1">
 <a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a>
@@ -355,7 +355,7 @@ address {
 <p id="rfc.section.3.p.2">Key is that the wire image is not limited to merely &#8220;the unencrypted bits in the header&#8221;. In particular, interpacket timing, packet size, and message sequence information can be used to infer other parameters of the behavior of the protocol, or to fingerprint protocols and/or specific implementations of the protocol; see <a href="#time-and-size" class="xref">Section 3.1</a>.</p>
 <p id="rfc.section.3.p.3">An important implication of this property is that a protocol which uses confidentiality protection for the headers it needs to operate can be deliberately designed to have a specified wire image that is separate from that machinery; see <a href="#engineering" class="xref">Section 3.3</a>. Note that this is a capability unique to encrypted protocols. Parts of a wire image may also be made visible to devices on path, but immutable through end-to-end integrity protection; see <a href="#integrity" class="xref">Section 3.2</a>.</p>
 <p id="rfc.section.3.p.4">Portions of the wire image of a protocol that are neither confidentiality-protected nor integrity-protected are writable by devices on the path(s) between the endpoints using the protocol. A protocol with a wire image that is largely writable operating over a path with devices that understand the semantics of the protocol&#8217;s wire image can modify it, in order to induce behaviors at the protocol&#8217;s participants. This is the case with TCP in the current Internet.</p>
-<p id="rfc.section.3.p.5">Note also that the wire image is multidimensional. This implies that the name &#8220;image&#8221; is not merely metaphorical, and that general image recognition techniques may be applicable to extracting paterns and information from it.</p>
+<p id="rfc.section.3.p.5">Note also that the wire image is multidimensional. This implies that the name &#8220;image&#8221; is not merely metaphorical, and that general image recognition techniques may be applicable to extracting patterns and information from it.</p>
 <h1 id="rfc.section.3.1">
 <a href="#rfc.section.3.1">3.1.</a> <a href="#time-and-size" id="time-and-size">Obscuring timing and sizing information</a>
 </h1>
@@ -368,14 +368,22 @@ address {
 <h1 id="rfc.section.3.3">
 <a href="#rfc.section.3.3">3.3.</a> <a href="#engineering" id="engineering">Engineering the Wire Image</a>
 </h1>
-<p id="rfc.section.3.3.p.1">Understanding the nature of a protocol&#8217;s wire image allows it to be engineered. The general principle at work here, observed through experience with deployability and non-deployability of protocols at the network and transport layers in the Internet, is that all observable parts of a protocol&#8217;s wire image will eventually ossify, and become difficult or impossible to change in future extensions or revisions of the protocol.</p>
-<p id="rfc.section.3.3.p.2">A network function which serves a purpose useful to its deployer will use the information it needs from the wire image, and will tend to get that information from the wire image in the simplest way possible. A protocol&#8217;s wire image should therefore be designed to explicitly expose information to those network functions in an obvious way, and to expose as little other information as possible.</p>
-<p id="rfc.section.3.3.p.3">However, even when information is explicitly provided to the network, any information that is exposed by the wire image, even that information not intended to be consumed by an observer, must be designed carefully as it might ossify, making it immutable for future versions of the protocol. For example, information needed to support decryption by the receiving endpoint (cryptographic handshakes, sequence numbers, and so on) may be used by the path for its own purposes.</p>
-<p id="rfc.section.3.3.p.4">Since they are separate from the signals that drive an encrypted protocol&#8217;s mechanisms, the veracity of integrity-protected signals in an engineered wire image intended for consumption by the path may not be verifiable by on-path devices; see <a href="#PATH-SIGNALS" class="xref">[PATH-SIGNALS]</a>. Indeed, any two endpoints with a secret channel between them (in this case, the encrypted protocol itself) may collude to change the semantics and information content of these signals. This is an unavoidable consequence of the separation of the wire image from the protocol&#8217;s operation afforded by confidentiality protection of the protocol&#8217;s headers.</p>
+<p id="rfc.section.3.3.p.1">Understanding the nature of a protocol&#8217;s wire image allows it to be engineered. The general principle at work here, observed through experience with deployability and non-deployability of protocols at the network and transport layers in the Internet, is that all observable parts of a protocol&#8217;s wire image will eventually be used by devices on path; consequently, changes or future extensions that affect the observable part of the wire image become difficult or impossible to deploy.</p>
+<p id="rfc.section.3.3.p.2">A network function which serves a purpose useful to its deployer will use the information it needs from the wire image, and will tend to get that information from the wire image in the simplest way possible.</p>
+<p id="rfc.section.3.3.p.3">For example, consider the case of the ubiquitous TCP <a href="#RFC0793" class="xref">[RFC0793]</a> transport protocol. As described in <a href="#PATH-SIGNALS" class="xref">[PATH-SIGNALS]</a>, several key in-network functions have evolved to take advantage of implicit signals in TCP&#8217;s wire image, which, as TCP provides neither integrity or confidentiality protection for its headers, is inseparable from ints internal operation. Some of these include:</p>
+<p></p>
+
+<ul>
+<li>Determining return routability and consent: For example, TCP&#8217;s wire image contains both an implicit indication that the sender of a packet is at least on the path toward its source address (in the acknowledgement number during the handshake), as well as an implicit indication that a receiving device consents to continue communication. These are used by stateful network firewalls.</li>
+<li>Measuring loss and latency: For example, examining the sequence of TCP&#8217;s sequence and acknowledgement numbers, as well as the ECN <a href="#RFC3168" class="xref">[RFC3168]</a> control bits allows the inference of congestion, loss and retransmission along the path. The sequence and acknowledgement numbers together with the timestamp option <a href="#RFC7323" class="xref">[RFC7323]</a> allow the measurement of application-experienced latency.</li>
+</ul>
+<p id="rfc.section.3.3.p.5">During the design of a protocol, the utility of features such as these shoud be considered, and the protocol&#8217;s wire image should therefore be designed to explicitly expose information to those network functions deemed important by the designers in an obvious way. The wire image should expose as little other information as possible.</p>
+<p id="rfc.section.3.3.p.6">However, even when information is explicitly provided to the network, any information that is exposed by the wire image, even that information not intended to be consumed by an observer, must be designed carefully as it might ossify, making it immutable for future versions of the protocol. For example, information needed to support decryption by the receiving endpoint (cryptographic handshakes, sequence numbers, and so on) may be used by devices along the path for their own purposes.</p>
+<p id="rfc.section.3.3.p.7">Since they are separate from the signals that drive an encrypted protocol&#8217;s mechanisms, the veracity of integrity-protected signals in an engineered wire image intended for consumption by the path may not be verifiable by on-path devices; see <a href="#PATH-SIGNALS" class="xref">[PATH-SIGNALS]</a>. Indeed, any two endpoints with a secret channel between them (in this case, the encrypted protocol itself) may collude to change the semantics and information content of these signals. This is an unavoidable consequence of the separation of the wire image from the protocol&#8217;s operation afforded by confidentiality protection of the protocol&#8217;s headers.</p>
 <h1 id="rfc.section.4">
 <a href="#rfc.section.4">4.</a> <a href="#acknowledgments" id="acknowledgments">Acknowledgments</a>
 </h1>
-<p id="rfc.section.4.p.1">Thanks to Martin Thomson and Thomas Fossati for discussions that have improved this document.</p>
+<p id="rfc.section.4.p.1">Thanks to Martin Thomson, Thomas Fossati, and Ted Hardie for discussions that have improved this document.</p>
 <p id="rfc.section.4.p.2">This work is partially supported by the European Commission under Horizon 2020 grant agreement no. 688421 Measurement and Architecture for a Middleboxed Internet (MAMI), and by the Swiss State Secretariat for Education, Research, and Innovation under contract no. 15.0268. This support does not imply endorsement.</p>
 <h1 id="rfc.references">
 <a href="#rfc.references">5.</a> Informative References</h1>
@@ -383,7 +391,7 @@ address {
 <tr>
 <td class="reference"><b id="EFFECT-ENCRYPT">[EFFECT-ENCRYPT]</b></td>
 <td class="top">
-<a>Moriarty, K.</a> and <a>A. Morton</a>, "<a href="https://tools.ietf.org/html/draft-mm-wg-effect-encrypt-13">Effect of Pervasive Encryption on Operators</a>", Internet-Draft draft-mm-wg-effect-encrypt-13, October 2017.</td>
+<a>Moriarty, K.</a> and <a>A. Morton</a>, "<a href="https://tools.ietf.org/html/draft-mm-wg-effect-encrypt-21">Effects of Pervasive Encryption on Operators</a>", Internet-Draft draft-mm-wg-effect-encrypt-21, February 2018.</td>
 </tr>
 <tr>
 <td class="reference"><b id="PATH-SIGNALS">[PATH-SIGNALS]</b></td>
@@ -396,9 +404,24 @@ address {
 <a>Kuehlewind, M.</a> and <a>B. Trammell</a>, "<a href="https://tools.ietf.org/html/draft-ietf-quic-manageability-01">Manageability of the QUIC Transport Protocol</a>", Internet-Draft draft-ietf-quic-manageability-01, October 2017.</td>
 </tr>
 <tr>
+<td class="reference"><b id="RFC0793">[RFC0793]</b></td>
+<td class="top">
+<a>Postel, J.</a>, "<a href="https://tools.ietf.org/html/rfc793">Transmission Control Protocol</a>", STD 7, RFC 793, DOI 10.17487/RFC0793, September 1981.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC3168">[RFC3168]</b></td>
+<td class="top">
+<a>Ramakrishnan, K.</a>, <a>Floyd, S.</a> and <a>D. Black</a>, "<a href="https://tools.ietf.org/html/rfc3168">The Addition of Explicit Congestion Notification (ECN) to IP</a>", RFC 3168, DOI 10.17487/RFC3168, September 2001.</td>
+</tr>
+<tr>
+<td class="reference"><b id="RFC7323">[RFC7323]</b></td>
+<td class="top">
+<a>Borman, D.</a>, <a>Braden, B.</a>, <a>Jacobson, V.</a> and <a>R. Scheffenegger</a>, "<a href="https://tools.ietf.org/html/rfc7323">TCP Extensions for High Performance</a>", RFC 7323, DOI 10.17487/RFC7323, September 2014.</td>
+</tr>
+<tr>
 <td class="reference"><b id="TRANSPORT-ENCRYPT">[TRANSPORT-ENCRYPT]</b></td>
 <td class="top">
-<a>Fairhurst, G.</a> and <a>C. Perkins</a>, "<a href="https://tools.ietf.org/html/draft-fairhurst-tsvwg-transport-encrypt-04">The Impact of Transport Header Encryption on Operation and Evolution of the Internet</a>", Internet-Draft draft-fairhurst-tsvwg-transport-encrypt-04, September 2017.</td>
+<a>Fairhurst, G.</a> and <a>C. Perkins</a>, "<a href="https://tools.ietf.org/html/draft-fairhurst-tsvwg-transport-encrypt-06">The Impact of Transport Header Confidentiality on Network Operation and Evolution of the Internet</a>", Internet-Draft draft-fairhurst-tsvwg-transport-encrypt-06, February 2018.</td>
 </tr>
 </tbody></table>
 <h1 id="rfc.authors"><a href="#rfc.authors">Authors' Addresses</a></h1>
