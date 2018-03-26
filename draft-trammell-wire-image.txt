@@ -140,6 +140,14 @@ Internet-Draft                 Wire Image                     March 2018
    recognition techniques may be applicable to extracting patterns and
    information from it.
 
+   From the point of view of a passive observer, the wire image of a
+   single protocol is rarely seen in isolation.  The dynamics of the
+   application and network stacks on each endpoint use multiple
+   protocols for any higher level task.  Most protocols involving user
+   content, for example, are often seen on the wire together with DNS
+   traffic; the information from these two wire images can be correlated
+   to infer information about the dynamics of the overlying application.
+
 3.1.  Obscuring timing and sizing information
 
    Cryptography can protect the confidentiality of a protocol's headers,
@@ -154,14 +162,6 @@ Internet-Draft                 Wire Image                     March 2018
    sender may use padding to increase the size of packets, and add delay
    to transmission scheduling in order to increase interpacket delay.
    However, it does this as the expense of bandwidth efficiency and
-   latency, so this technique is limited to the application's tolerance
-   for latency and bandwidth inefficiency.
-
-3.2.  Integrity Protection of the Wire Image
-
-   Adding end-to-end integrity protection to portions of the wire image
-   makes it impossible for on-path devices to modify them without
-   detection by the endpoints, which can then take action in response to
 
 
 
@@ -170,6 +170,14 @@ Trammell & Kuehlewind  Expires September 27, 2018               [Page 3]
 Internet-Draft                 Wire Image                     March 2018
 
 
+   latency, so this technique is limited to the application's tolerance
+   for latency and bandwidth inefficiency.
+
+3.2.  Integrity Protection of the Wire Image
+
+   Adding end-to-end integrity protection to portions of the wire image
+   makes it impossible for on-path devices to modify them without
+   detection by the endpoints, which can then take action in response to
    those modifications, making these portions of the wire image
    effectively immutable.  However, they can still be observed by
    devices on path.  This allows the creation of signals intended by the
@@ -208,16 +216,8 @@ Internet-Draft                 Wire Image                     March 2018
    transport protocol.  As described in [PATH-SIGNALS], several key in-
    network functions have evolved to take advantage of implicit signals
    in TCP's wire image, which, as TCP provides neither integrity or
-   confidentiality protection for its headers, is inseparable from ints
+   confidentiality protection for its headers, is inseparable from its
    internal operation.  Some of these include:
-
-   o  Determining return routability and consent: For example, TCP's
-      wire image contains both an implicit indication that the sender of
-      a packet is at least on the path toward its source address (in the
-      acknowledgement number during the handshake), as well as an
-      implicit indication that a receiving device consents to continue
-      communication.  These are used by stateful network firewalls.
-
 
 
 
@@ -225,6 +225,13 @@ Trammell & Kuehlewind  Expires September 27, 2018               [Page 4]
 
 Internet-Draft                 Wire Image                     March 2018
 
+
+   o  Determining return routability and consent: For example, TCP's
+      wire image contains both an implicit indication that the sender of
+      a packet is at least on the path toward its source address (in the
+      acknowledgement number during the handshake), as well as an
+      implicit indication that a receiving device consents to continue
+      communication.  These are used by stateful network firewalls.
 
    o  Measuring loss and latency: For example, examining the sequence of
       TCP's sequence and acknowledgement numbers, as well as the ECN
@@ -267,13 +274,6 @@ Internet-Draft                 Wire Image                     March 2018
    protocol's mechanisms, the veracity of integrity-protected signals in
    an engineered wire image intended for consumption by the path may not
    be verifiable by on-path devices; see [PATH-SIGNALS].  Indeed, any
-   two endpoints with a secret channel between them (in this case, the
-   encrypted protocol itself) may collude to change the semantics and
-   information content of these signals.  This is an unavoidable
-   consequence of the separation of the wire image from the protocol's
-   operation afforded by confidentiality protection of the protocol's
-   headers.
-
 
 
 
@@ -281,6 +281,13 @@ Trammell & Kuehlewind  Expires September 27, 2018               [Page 5]
 
 Internet-Draft                 Wire Image                     March 2018
 
+
+   two endpoints with a secret channel between them (in this case, the
+   encrypted protocol itself) may collude to change the semantics and
+   information content of these signals.  This is an unavoidable
+   consequence of the separation of the wire image from the protocol's
+   operation afforded by confidentiality protection of the protocol's
+   headers.
 
 4.  Acknowledgments
 
@@ -324,19 +331,17 @@ Internet-Draft                 Wire Image                     March 2018
               RFC 3168, DOI 10.17487/RFC3168, September 2001,
               <https://www.rfc-editor.org/info/rfc3168>.
 
-   [RFC7323]  Borman, D., Braden, B., Jacobson, V., and R.
-              Scheffenegger, Ed., "TCP Extensions for High Performance",
-              RFC 7323, DOI 10.17487/RFC7323, September 2014,
-              <https://www.rfc-editor.org/info/rfc7323>.
-
-
-
 
 
 Trammell & Kuehlewind  Expires September 27, 2018               [Page 6]
 
 Internet-Draft                 Wire Image                     March 2018
 
+
+   [RFC7323]  Borman, D., Braden, B., Jacobson, V., and R.
+              Scheffenegger, Ed., "TCP Extensions for High Performance",
+              RFC 7323, DOI 10.17487/RFC7323, September 2014,
+              <https://www.rfc-editor.org/info/rfc7323>.
 
    [TRANSPORT-ENCRYPT]
               Fairhurst, G. and C. Perkins, "The Impact of Transport
@@ -362,11 +367,6 @@ Authors' Addresses
    Switzerland
 
    Email: mirja.kuehlewind@tik.ee.ethz.ch
-
-
-
-
-
 
 
 
