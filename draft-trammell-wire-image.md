@@ -195,6 +195,19 @@ information needed to support decryption by the receiving endpoint
 (cryptographic handshakes, sequence numbers, and so on) may be used by devices
 along the path for their own purposes.
 
+### Invariants
+
+One approach to reduce the extent of the wire image that will be used by
+devices on the path is to define a set of invariants for a protocol during its
+development. Invariants are, in essence, a promise made by the protocol's
+developers that certain bits in the wire image, and behaviors observable in
+the wire image, will be preserved through the specification of all future
+versions of the protocol. QUIC's invariants
+{{?QUIC-INVARIANTS=I-D.ietf-quic-invariants}} are an initial attempt to apply
+this approach to QUIC.
+
+### Trustworthiness of Engineered Signals
+
 Since they are separate from the signals that drive an encrypted protocol's
 mechanisms, the veracity of integrity-protected signals in an engineered wire
 image intended for consumption by the path may not be verifiable by on-path
@@ -207,8 +220,9 @@ headers.
 
 # Acknowledgments
 
-Thanks to Martin Thomson, Thomas Fossati, and Ted Hardie for discussions that
-have improved this document.
+Thanks to Martin Thomson, Thomas Fossati, Ted Hardie, and the membership of
+the IAB Stack Evolution Program, for discussions that have improved this
+document.
 
 This work is partially supported by the European Commission under Horizon 2020
 grant agreement no. 688421 Measurement and Architecture for a Middleboxed
