@@ -281,6 +281,8 @@ address {
 <link href="#rfc.section.3.1" rel="Chapter" title="3.1 Obscuring timing and sizing information">
 <link href="#rfc.section.3.2" rel="Chapter" title="3.2 Integrity Protection of the Wire Image">
 <link href="#rfc.section.3.3" rel="Chapter" title="3.3 Engineering the Wire Image">
+<link href="#rfc.section.3.3.1" rel="Chapter" title="3.3.1 Invariants">
+<link href="#rfc.section.3.3.2" rel="Chapter" title="3.3.2 Trustworthiness of Engineered Signals">
 <link href="#rfc.section.4" rel="Chapter" title="4 Acknowledgments">
 <link href="#rfc.references" rel="Chapter" title="5 Informative References">
 <link href="#rfc.authors" rel="Chapter">
@@ -291,7 +293,7 @@ address {
 
   <meta name="dct.creator" content="Trammell, B. and M. Kuehlewind" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-trammell-wire-image-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2018-2-21" />
+  <meta name="dct.issued" scheme="ISO8601" content="2018-3-26" />
   <meta name="dct.abstract" content="This document defines the wire image, an abstraction of the information available to an on-path non-participant in a networking protocol. This abstraction is intended to shed light on the implications on increased encryption has for network functions that use the wire image." />
   <meta name="description" content="This document defines the wire image, an abstraction of the information available to an on-path non-participant in a networking protocol. This abstraction is intended to shed light on the implications on increased encryption has for network functions that use the wire image." />
 
@@ -315,8 +317,8 @@ address {
 <td class="right">ETH Zurich</td>
 </tr>
 <tr>
-<td class="left">Expires: August 25, 2018</td>
-<td class="right">February 21, 2018</td>
+<td class="left">Expires: September 27, 2018</td>
+<td class="right">March 26, 2018</td>
 </tr>
 
     	
@@ -332,7 +334,7 @@ address {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on August 25, 2018.</p>
+<p>This Internet-Draft will expire on September 27, 2018.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2018 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -379,11 +381,18 @@ address {
 </ul>
 <p id="rfc.section.3.3.p.5">During the design of a protocol, the utility of features such as these shoud be considered, and the protocol&#8217;s wire image should therefore be designed to explicitly expose information to those network functions deemed important by the designers in an obvious way. The wire image should expose as little other information as possible.</p>
 <p id="rfc.section.3.3.p.6">However, even when information is explicitly provided to the network, any information that is exposed by the wire image, even that information not intended to be consumed by an observer, must be designed carefully as it might ossify, making it immutable for future versions of the protocol. For example, information needed to support decryption by the receiving endpoint (cryptographic handshakes, sequence numbers, and so on) may be used by devices along the path for their own purposes.</p>
-<p id="rfc.section.3.3.p.7">Since they are separate from the signals that drive an encrypted protocol&#8217;s mechanisms, the veracity of integrity-protected signals in an engineered wire image intended for consumption by the path may not be verifiable by on-path devices; see <a href="#PATH-SIGNALS" class="xref">[PATH-SIGNALS]</a>. Indeed, any two endpoints with a secret channel between them (in this case, the encrypted protocol itself) may collude to change the semantics and information content of these signals. This is an unavoidable consequence of the separation of the wire image from the protocol&#8217;s operation afforded by confidentiality protection of the protocol&#8217;s headers.</p>
+<h1 id="rfc.section.3.3.1">
+<a href="#rfc.section.3.3.1">3.3.1.</a> <a href="#invariants" id="invariants">Invariants</a>
+</h1>
+<p id="rfc.section.3.3.1.p.1">One approach to reduce the extent of the wire image that will be used by devices on the path is to define a set of invariants for a protocol during its development. Invariants are, in essence, a promise made by the protocol&#8217;s developers that certain bits in the wire image, and behaviors observable in the wire image, will be preserved through the specification of all future versions of the protocol. QUIC&#8217;s invariants <a href="#QUIC-INVARIANTS" class="xref">[QUIC-INVARIANTS]</a> are an initial attempt to apply this approach to QUIC.</p>
+<h1 id="rfc.section.3.3.2">
+<a href="#rfc.section.3.3.2">3.3.2.</a> <a href="#trustworthiness-of-engineered-signals" id="trustworthiness-of-engineered-signals">Trustworthiness of Engineered Signals</a>
+</h1>
+<p id="rfc.section.3.3.2.p.1">Since they are separate from the signals that drive an encrypted protocol&#8217;s mechanisms, the veracity of integrity-protected signals in an engineered wire image intended for consumption by the path may not be verifiable by on-path devices; see <a href="#PATH-SIGNALS" class="xref">[PATH-SIGNALS]</a>. Indeed, any two endpoints with a secret channel between them (in this case, the encrypted protocol itself) may collude to change the semantics and information content of these signals. This is an unavoidable consequence of the separation of the wire image from the protocol&#8217;s operation afforded by confidentiality protection of the protocol&#8217;s headers.</p>
 <h1 id="rfc.section.4">
 <a href="#rfc.section.4">4.</a> <a href="#acknowledgments" id="acknowledgments">Acknowledgments</a>
 </h1>
-<p id="rfc.section.4.p.1">Thanks to Martin Thomson, Thomas Fossati, and Ted Hardie for discussions that have improved this document.</p>
+<p id="rfc.section.4.p.1">Thanks to Martin Thomson, Thomas Fossati, Ted Hardie, and the membership of the IAB Stack Evolution Program, for discussions that have improved this document.</p>
 <p id="rfc.section.4.p.2">This work is partially supported by the European Commission under Horizon 2020 grant agreement no. 688421 Measurement and Architecture for a Middleboxed Internet (MAMI), and by the Swiss State Secretariat for Education, Research, and Innovation under contract no. 15.0268. This support does not imply endorsement.</p>
 <h1 id="rfc.references">
 <a href="#rfc.references">5.</a> Informative References</h1>
@@ -391,12 +400,17 @@ address {
 <tr>
 <td class="reference"><b id="EFFECT-ENCRYPT">[EFFECT-ENCRYPT]</b></td>
 <td class="top">
-<a>Moriarty, K.</a> and <a>A. Morton</a>, "<a href="https://tools.ietf.org/html/draft-mm-wg-effect-encrypt-21">Effects of Pervasive Encryption on Operators</a>", Internet-Draft draft-mm-wg-effect-encrypt-21, February 2018.</td>
+<a>Moriarty, K.</a> and <a>A. Morton</a>, "<a href="https://tools.ietf.org/html/draft-mm-wg-effect-encrypt-25">Effects of Pervasive Encryption on Operators</a>", Internet-Draft draft-mm-wg-effect-encrypt-25, March 2018.</td>
 </tr>
 <tr>
 <td class="reference"><b id="PATH-SIGNALS">[PATH-SIGNALS]</b></td>
 <td class="top">
 <a>Hardie, T.</a>, "<a href="https://tools.ietf.org/html/draft-hardie-path-signals-02">Path signals</a>", Internet-Draft draft-hardie-path-signals-02, November 2017.</td>
+</tr>
+<tr>
+<td class="reference"><b id="QUIC-INVARIANTS">[QUIC-INVARIANTS]</b></td>
+<td class="top">
+<a>Thomson, M.</a>, "<a href="https://tools.ietf.org/html/draft-ietf-quic-invariants-01">Version-Independent Properties of QUIC</a>", Internet-Draft draft-ietf-quic-invariants-01, March 2018.</td>
 </tr>
 <tr>
 <td class="reference"><b id="QUIC-MANAGEABILITY">[QUIC-MANAGEABILITY]</b></td>
@@ -487,7 +501,11 @@ address {
 </li>
 <li>3.3.   <a href="#rfc.section.3.3">Engineering the Wire Image</a>
 </li>
-</ul><li>4.   <a href="#rfc.section.4">Acknowledgments</a>
+<ul><li>3.3.1.   <a href="#rfc.section.3.3.1">Invariants</a>
+</li>
+<li>3.3.2.   <a href="#rfc.section.3.3.2">Trustworthiness of Engineered Signals</a>
+</li>
+</ul></ul><li>4.   <a href="#rfc.section.4">Acknowledgments</a>
 </li>
 <li>5.   <a href="#rfc.references">Informative References</a>
 </li>

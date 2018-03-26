@@ -5,7 +5,7 @@
 Network Working Group                                        B. Trammell
 Internet-Draft                                             M. Kuehlewind
 Intended status: Informational                                ETH Zurich
-Expires: August 25, 2018                               February 21, 2018
+Expires: September 27, 2018                               March 26, 2018
 
 
                   The Wire Image of a Network Protocol
@@ -34,7 +34,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on August 25, 2018.
+   This Internet-Draft will expire on September 27, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Trammell & Kuehlewind    Expires August 25, 2018                [Page 1]
+Trammell & Kuehlewind  Expires September 27, 2018               [Page 1]
 
-Internet-Draft                 Wire Image                  February 2018
+Internet-Draft                 Wire Image                     March 2018
 
 
 1.  Introduction
@@ -109,9 +109,9 @@ Internet-Draft                 Wire Image                  February 2018
 
 
 
-Trammell & Kuehlewind    Expires August 25, 2018                [Page 2]
+Trammell & Kuehlewind  Expires September 27, 2018               [Page 2]
 
-Internet-Draft                 Wire Image                  February 2018
+Internet-Draft                 Wire Image                     March 2018
 
 
    parameters of the behavior of the protocol, or to fingerprint
@@ -165,9 +165,9 @@ Internet-Draft                 Wire Image                  February 2018
 
 
 
-Trammell & Kuehlewind    Expires August 25, 2018                [Page 3]
+Trammell & Kuehlewind  Expires September 27, 2018               [Page 3]
 
-Internet-Draft                 Wire Image                  February 2018
+Internet-Draft                 Wire Image                     March 2018
 
 
    those modifications, making these portions of the wire image
@@ -221,9 +221,9 @@ Internet-Draft                 Wire Image                  February 2018
 
 
 
-Trammell & Kuehlewind    Expires August 25, 2018                [Page 4]
+Trammell & Kuehlewind  Expires September 27, 2018               [Page 4]
 
-Internet-Draft                 Wire Image                  February 2018
+Internet-Draft                 Wire Image                     March 2018
 
 
    o  Measuring loss and latency: For example, examining the sequence of
@@ -250,6 +250,19 @@ Internet-Draft                 Wire Image                  February 2018
    sequence numbers, and so on) may be used by devices along the path
    for their own purposes.
 
+3.3.1.  Invariants
+
+   One approach to reduce the extent of the wire image that will be used
+   by devices on the path is to define a set of invariants for a
+   protocol during its development.  Invariants are, in essence, a
+   promise made by the protocol's developers that certain bits in the
+   wire image, and behaviors observable in the wire image, will be
+   preserved through the specification of all future versions of the
+   protocol.  QUIC's invariants [QUIC-INVARIANTS] are an initial attempt
+   to apply this approach to QUIC.
+
+3.3.2.  Trustworthiness of Engineered Signals
+
    Since they are separate from the signals that drive an encrypted
    protocol's mechanisms, the veracity of integrity-protected signals in
    an engineered wire image intended for consumption by the path may not
@@ -261,10 +274,19 @@ Internet-Draft                 Wire Image                  February 2018
    operation afforded by confidentiality protection of the protocol's
    headers.
 
+
+
+
+Trammell & Kuehlewind  Expires September 27, 2018               [Page 5]
+
+Internet-Draft                 Wire Image                     March 2018
+
+
 4.  Acknowledgments
 
-   Thanks to Martin Thomson, Thomas Fossati, and Ted Hardie for
-   discussions that have improved this document.
+   Thanks to Martin Thomson, Thomas Fossati, Ted Hardie, and the
+   membership of the IAB Stack Evolution Program, for discussions that
+   have improved this document.
 
    This work is partially supported by the European Commission under
    Horizon 2020 grant agreement no. 688421 Measurement and Architecture
@@ -272,26 +294,21 @@ Internet-Draft                 Wire Image                  February 2018
    for Education, Research, and Innovation under contract no. 15.0268.
    This support does not imply endorsement.
 
-
-
-
-
-
-Trammell & Kuehlewind    Expires August 25, 2018                [Page 5]
-
-Internet-Draft                 Wire Image                  February 2018
-
-
 5.  Informative References
 
    [EFFECT-ENCRYPT]
               Moriarty, K. and A. Morton, "Effects of Pervasive
-              Encryption on Operators", draft-mm-wg-effect-encrypt-21
-              (work in progress), February 2018.
+              Encryption on Operators", draft-mm-wg-effect-encrypt-25
+              (work in progress), March 2018.
 
    [PATH-SIGNALS]
               Hardie, T., "Path signals", draft-hardie-path-signals-02
               (work in progress), November 2017.
+
+   [QUIC-INVARIANTS]
+              Thomson, M., "Version-Independent Properties of QUIC",
+              draft-ietf-quic-invariants-01 (work in progress), March
+              2018.
 
    [QUIC-MANAGEABILITY]
               Kuehlewind, M. and B. Trammell, "Manageability of the QUIC
@@ -312,6 +329,15 @@ Internet-Draft                 Wire Image                  February 2018
               RFC 7323, DOI 10.17487/RFC7323, September 2014,
               <https://www.rfc-editor.org/info/rfc7323>.
 
+
+
+
+
+Trammell & Kuehlewind  Expires September 27, 2018               [Page 6]
+
+Internet-Draft                 Wire Image                     March 2018
+
+
    [TRANSPORT-ENCRYPT]
               Fairhurst, G. and C. Perkins, "The Impact of Transport
               Header Confidentiality on Network Operation and Evolution
@@ -327,15 +353,6 @@ Authors' Addresses
    Switzerland
 
    Email: ietf@trammell.ch
-
-
-
-
-
-
-Trammell & Kuehlewind    Expires August 25, 2018                [Page 6]
-
-Internet-Draft                 Wire Image                  February 2018
 
 
    Mirja Kuehlewind
@@ -372,21 +389,4 @@ Internet-Draft                 Wire Image                  February 2018
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Trammell & Kuehlewind    Expires August 25, 2018                [Page 7]
+Trammell & Kuehlewind  Expires September 27, 2018               [Page 7]
