@@ -111,6 +111,14 @@ Note also that the wire image is multidimensional. This implies that the name
 "image" is not merely metaphorical, and that general image recognition
 techniques may be applicable to extracting patterns and information from it.
 
+From the point of view of a passive observer, the wire image of a single
+protocol is rarely seen in isolation. The dynamics of the application and
+network stacks on each endpoint use multiple protocols for any higher level
+task. Most protocols involving user content, for example, are often seen on
+the wire together with DNS traffic; the information from these two wire images
+can be correlated to infer information about the dynamics of the overlying
+application.
+
 ## Obscuring timing and sizing information {#time-and-size}
 
 Cryptography can protect the confidentiality of a protocol's headers, to the
@@ -164,7 +172,7 @@ For example, consider the case of the ubiquitous TCP {{?RFC0793}} transport
 protocol. As described in {{?PATH-SIGNALS=I-D.hardie-path-signals}}, several
 key in-network functions have evolved to take advantage of implicit signals in
 TCP's wire image, which, as TCP provides neither integrity or confidentiality
-protection for its headers, is inseparable from ints internal operation. Some
+protection for its headers, is inseparable from its internal operation. Some
 of these include:
 
 - Determining return routability and consent: For example, TCP's wire image
