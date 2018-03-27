@@ -5,7 +5,7 @@
 Network Working Group                                        B. Trammell
 Internet-Draft                                             M. Kuehlewind
 Intended status: Informational                                ETH Zurich
-Expires: September 27, 2018                               March 26, 2018
+Expires: September 28, 2018                               March 27, 2018
 
 
                   The Wire Image of a Network Protocol
@@ -34,7 +34,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 27, 2018.
+   This Internet-Draft will expire on September 28, 2018.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Trammell & Kuehlewind  Expires September 27, 2018               [Page 1]
+Trammell & Kuehlewind  Expires September 28, 2018               [Page 1]
 
 Internet-Draft                 Wire Image                     March 2018
 
@@ -109,7 +109,7 @@ Internet-Draft                 Wire Image                     March 2018
 
 
 
-Trammell & Kuehlewind  Expires September 27, 2018               [Page 2]
+Trammell & Kuehlewind  Expires September 28, 2018               [Page 2]
 
 Internet-Draft                 Wire Image                     March 2018
 
@@ -165,7 +165,7 @@ Internet-Draft                 Wire Image                     March 2018
 
 
 
-Trammell & Kuehlewind  Expires September 27, 2018               [Page 3]
+Trammell & Kuehlewind  Expires September 28, 2018               [Page 3]
 
 Internet-Draft                 Wire Image                     March 2018
 
@@ -221,7 +221,7 @@ Internet-Draft                 Wire Image                     March 2018
 
 
 
-Trammell & Kuehlewind  Expires September 27, 2018               [Page 4]
+Trammell & Kuehlewind  Expires September 28, 2018               [Page 4]
 
 Internet-Draft                 Wire Image                     March 2018
 
@@ -268,20 +268,30 @@ Internet-Draft                 Wire Image                     March 2018
    protocol.  QUIC's invariants [QUIC-INVARIANTS] are an initial attempt
    to apply this approach to QUIC.
 
+   While static aspects of the wire image - bits with simple semantics
+   at fixed positions in protocol headers - can easily be made
+   invariant, different aspects of the wire image may be more or less
+   appropriate to define as invariants.  For a protocol with a version
+   and/or extension negotiation mechanism, the bits in the header and
+   behaviors tied to those bits which implement version negotiation
+
+
+
+Trammell & Kuehlewind  Expires September 28, 2018               [Page 5]
+
+Internet-Draft                 Wire Image                     March 2018
+
+
+   should be made invariant.  More fluid aspects of the wire image and
+   behaviors which are not necessary for interoperability are not
+   appropriate as invariants.
+
 3.3.2.  Trustworthiness of Engineered Signals
 
    Since they are separate from the signals that drive an encrypted
    protocol's mechanisms, the veracity of integrity-protected signals in
    an engineered wire image intended for consumption by the path may not
    be verifiable by on-path devices; see [PATH-SIGNALS].  Indeed, any
-
-
-
-Trammell & Kuehlewind  Expires September 27, 2018               [Page 5]
-
-Internet-Draft                 Wire Image                     March 2018
-
-
    two endpoints with a secret channel between them (in this case, the
    encrypted protocol itself) may collude to change the semantics and
    information content of these signals.  This is an unavoidable
@@ -317,6 +327,17 @@ Internet-Draft                 Wire Image                     March 2018
               draft-ietf-quic-invariants-01 (work in progress), March
               2018.
 
+
+
+
+
+
+
+Trammell & Kuehlewind  Expires September 28, 2018               [Page 6]
+
+Internet-Draft                 Wire Image                     March 2018
+
+
    [QUIC-MANAGEABILITY]
               Kuehlewind, M. and B. Trammell, "Manageability of the QUIC
               Transport Protocol", draft-ietf-quic-manageability-01
@@ -330,13 +351,6 @@ Internet-Draft                 Wire Image                     March 2018
               of Explicit Congestion Notification (ECN) to IP",
               RFC 3168, DOI 10.17487/RFC3168, September 2001,
               <https://www.rfc-editor.org/info/rfc3168>.
-
-
-
-Trammell & Kuehlewind  Expires September 27, 2018               [Page 6]
-
-Internet-Draft                 Wire Image                     March 2018
-
 
    [RFC7323]  Borman, D., Braden, B., Jacobson, V., and R.
               Scheffenegger, Ed., "TCP Extensions for High Performance",
@@ -375,18 +389,4 @@ Authors' Addresses
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-Trammell & Kuehlewind  Expires September 27, 2018               [Page 7]
+Trammell & Kuehlewind  Expires September 28, 2018               [Page 7]
