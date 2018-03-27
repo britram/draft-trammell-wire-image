@@ -214,6 +214,16 @@ versions of the protocol. QUIC's invariants
 {{?QUIC-INVARIANTS=I-D.ietf-quic-invariants}} are an initial attempt to apply
 this approach to QUIC.
 
+While static aspects of the wire image -- bits with simple semantics at fixed
+positions in protocol headers -- can easily be made invariant, different
+aspects of the wire image may be more or less appropriate to define as
+invariants. For a protocol with a version and/or extension negotiation
+mechanism, the bits in the header and behaviors tied to those bits which
+implement version negotiation should be made invariant. More fluid aspects of
+the wire image and behaviors which are not necessary for interoperability are
+not appropriate as invariants.
+
+
 ### Trustworthiness of Engineered Signals
 
 Since they are separate from the signals that drive an encrypted protocol's
