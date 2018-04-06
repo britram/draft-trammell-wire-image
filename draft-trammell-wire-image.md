@@ -203,14 +203,14 @@ information needed to support decryption by the receiving endpoint
 (cryptographic handshakes, sequence numbers, and so on) may be used by devices
 along the path for their own purposes.
 
-### Invariants
+### Declaring Protocol Invariants
 
 One approach to reduce the extent of the wire image that will be used by
 devices on the path is to define a set of invariants for a protocol during its
-development. Invariants are, in essence, a promise made by the protocol's
-developers that certain bits in the wire image, and behaviors observable in
-the wire image, will be preserved through the specification of all future
-versions of the protocol. QUIC's invariants
+development. Declaring a protocol's invariants represents a promise made by
+the protocol's developers that certain bits in the wire image, and behaviors
+observable in the wire image, will be preserved through the specification of
+all future versions of the protocol. QUIC's invariants
 {{?QUIC-INVARIANTS=I-D.ietf-quic-invariants}} are an initial attempt to apply
 this approach to QUIC.
 
@@ -223,6 +223,15 @@ implement version negotiation should be made invariant. More fluid aspects of
 the wire image and behaviors which are not necessary for interoperability are
 not appropriate as invariants.
 
+Parts of a protocol's wire image not declared invariant but intended to be
+visible to devices on path should be protected against "accidental
+invariance": the deployment of on-path devices over time that make simplifying
+assumptions about the behavior of those parts of the wire image, making new
+behaviors not meeting those assumptions difficult to deploy.
+Integrity-protected wire images should prove to be less prone to accidental
+invariance than those without any protection, but approaches such as those
+discussed in {{?USE-IT=I-D.thomson-use-it-or-lose-it}} may be useful in
+further preventing accidental invariance even in this case.
 
 ### Trustworthiness of Engineered Signals
 
@@ -238,9 +247,9 @@ headers.
 
 # Acknowledgments
 
-Thanks to Martin Thomson, Thomas Fossati, Ted Hardie, and the membership of
-the IAB Stack Evolution Program, for discussions that have improved this
-document.
+Thanks to Martin Thomson, Thomas Fossati, Ted Hardie, Mark Nottingham, and the
+membership of the IAB Stack Evolution Program, for discussions and feedback
+that have improved this document.
 
 This work is partially supported by the European Commission under Horizon 2020
 grant agreement no. 688421 Measurement and Architecture for a Middleboxed
