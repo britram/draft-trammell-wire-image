@@ -5,7 +5,7 @@
 Network Working Group                                        B. Trammell
 Internet-Draft                                             M. Kuehlewind
 Intended status: Informational                                ETH Zurich
-Expires: September 28, 2018                               March 27, 2018
+Expires: October 8, 2018                                  April 06, 2018
 
 
                   The Wire Image of a Network Protocol
@@ -34,7 +34,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on September 28, 2018.
+   This Internet-Draft will expire on October 8, 2018.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Trammell & Kuehlewind  Expires September 28, 2018               [Page 1]
+Trammell & Kuehlewind    Expires October 8, 2018                [Page 1]
 
-Internet-Draft                 Wire Image                     March 2018
+Internet-Draft                 Wire Image                     April 2018
 
 
 1.  Introduction
@@ -109,9 +109,9 @@ Internet-Draft                 Wire Image                     March 2018
 
 
 
-Trammell & Kuehlewind  Expires September 28, 2018               [Page 2]
+Trammell & Kuehlewind    Expires October 8, 2018                [Page 2]
 
-Internet-Draft                 Wire Image                     March 2018
+Internet-Draft                 Wire Image                     April 2018
 
 
    parameters of the behavior of the protocol, or to fingerprint
@@ -165,9 +165,9 @@ Internet-Draft                 Wire Image                     March 2018
 
 
 
-Trammell & Kuehlewind  Expires September 28, 2018               [Page 3]
+Trammell & Kuehlewind    Expires October 8, 2018                [Page 3]
 
-Internet-Draft                 Wire Image                     March 2018
+Internet-Draft                 Wire Image                     April 2018
 
 
    latency, so this technique is limited to the application's tolerance
@@ -221,9 +221,9 @@ Internet-Draft                 Wire Image                     March 2018
 
 
 
-Trammell & Kuehlewind  Expires September 28, 2018               [Page 4]
+Trammell & Kuehlewind    Expires October 8, 2018                [Page 4]
 
-Internet-Draft                 Wire Image                     March 2018
+Internet-Draft                 Wire Image                     April 2018
 
 
    o  Determining return routability and consent: For example, TCP's
@@ -257,16 +257,16 @@ Internet-Draft                 Wire Image                     March 2018
    sequence numbers, and so on) may be used by devices along the path
    for their own purposes.
 
-3.3.1.  Invariants
+3.3.1.  Declaring Protocol Invariants
 
    One approach to reduce the extent of the wire image that will be used
    by devices on the path is to define a set of invariants for a
-   protocol during its development.  Invariants are, in essence, a
-   promise made by the protocol's developers that certain bits in the
-   wire image, and behaviors observable in the wire image, will be
-   preserved through the specification of all future versions of the
-   protocol.  QUIC's invariants [QUIC-INVARIANTS] are an initial attempt
-   to apply this approach to QUIC.
+   protocol during its development.  Declaring a protocol's invariants
+   represents a promise made by the protocol's developers that certain
+   bits in the wire image, and behaviors observable in the wire image,
+   will be preserved through the specification of all future versions of
+   the protocol.  QUIC's invariants [QUIC-INVARIANTS] are an initial
+   attempt to apply this approach to QUIC.
 
    While static aspects of the wire image - bits with simple semantics
    at fixed positions in protocol headers - can easily be made
@@ -277,14 +277,24 @@ Internet-Draft                 Wire Image                     March 2018
 
 
 
-Trammell & Kuehlewind  Expires September 28, 2018               [Page 5]
+Trammell & Kuehlewind    Expires October 8, 2018                [Page 5]
 
-Internet-Draft                 Wire Image                     March 2018
+Internet-Draft                 Wire Image                     April 2018
 
 
    should be made invariant.  More fluid aspects of the wire image and
    behaviors which are not necessary for interoperability are not
    appropriate as invariants.
+
+   Parts of a protocol's wire image not declared invariant but intended
+   to be visible to devices on path should be protected against
+   "accidental invariance": the deployment of on-path devices over time
+   that make simplifying assumptions about the behavior of those parts
+   of the wire image, making new behaviors not meeting those assumptions
+   difficult to deploy.  Integrity-protected wire images should prove to
+   be less prone to accidental invariance than those without any
+   protection, but approaches such as those discussed in [USE-IT] may be
+   useful in further preventing accidental invariance even in this case.
 
 3.3.2.  Trustworthiness of Engineered Signals
 
@@ -301,9 +311,9 @@ Internet-Draft                 Wire Image                     March 2018
 
 4.  Acknowledgments
 
-   Thanks to Martin Thomson, Thomas Fossati, Ted Hardie, and the
-   membership of the IAB Stack Evolution Program, for discussions that
-   have improved this document.
+   Thanks to Martin Thomson, Thomas Fossati, Ted Hardie, Mark
+   Nottingham, and the membership of the IAB Stack Evolution Program,
+   for discussions and feedback that have improved this document.
 
    This work is partially supported by the European Commission under
    Horizon 2020 grant agreement no. 688421 Measurement and Architecture
@@ -318,25 +328,24 @@ Internet-Draft                 Wire Image                     March 2018
               Encryption on Operators", draft-mm-wg-effect-encrypt-25
               (work in progress), March 2018.
 
+
+
+
+
+
+Trammell & Kuehlewind    Expires October 8, 2018                [Page 6]
+
+Internet-Draft                 Wire Image                     April 2018
+
+
    [PATH-SIGNALS]
-              Hardie, T., "Path signals", draft-hardie-path-signals-02
-              (work in progress), November 2017.
+              Hardie, T., "Path Signals", draft-hardie-path-signals-03
+              (work in progress), April 2018.
 
    [QUIC-INVARIANTS]
               Thomson, M., "Version-Independent Properties of QUIC",
               draft-ietf-quic-invariants-01 (work in progress), March
               2018.
-
-
-
-
-
-
-
-Trammell & Kuehlewind  Expires September 28, 2018               [Page 6]
-
-Internet-Draft                 Wire Image                     March 2018
-
 
    [QUIC-MANAGEABILITY]
               Kuehlewind, M. and B. Trammell, "Manageability of the QUIC
@@ -363,6 +372,10 @@ Internet-Draft                 Wire Image                     March 2018
               of the Internet", draft-fairhurst-tsvwg-transport-
               encrypt-06 (work in progress), February 2018.
 
+   [USE-IT]   Thomson, M., "Long-term Viability of Protocol Extension
+              Mechanisms", draft-thomson-use-it-or-lose-it-01 (work in
+              progress), March 2018.
+
 Authors' Addresses
 
    Brian Trammell
@@ -372,6 +385,13 @@ Authors' Addresses
    Switzerland
 
    Email: ietf@trammell.ch
+
+
+
+
+Trammell & Kuehlewind    Expires October 8, 2018                [Page 7]
+
+Internet-Draft                 Wire Image                     April 2018
 
 
    Mirja Kuehlewind
@@ -389,4 +409,40 @@ Authors' Addresses
 
 
 
-Trammell & Kuehlewind  Expires September 28, 2018               [Page 7]
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Trammell & Kuehlewind    Expires October 8, 2018                [Page 8]
