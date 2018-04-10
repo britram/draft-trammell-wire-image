@@ -1,7 +1,7 @@
 ---
 title: The Wire Image of a Network Protocol
 abbrev: Wire Image
-docname: draft-trammell-wire-image-latest
+docname: draft-trammell-wire-image-04
 date:
 category: info
 
