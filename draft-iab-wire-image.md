@@ -1,7 +1,7 @@
 ---
 title: The Wire Image of a Network Protocol
 abbrev: Wire Image
-docname: draft-trammell-wire-image-latest
+docname: draft-iab-wire-image-latest
 date:
 category: info
 
@@ -61,18 +61,22 @@ discuss in this document. It is the wire image, not the protocol's
 specification, that determines how third parties on the network paths among
 protocol participants will interact with that protocol.
 
-Several documents currently under discussion in IETF working groups and the
-IETF in general, for example
-{{?QUIC-MANAGEABILITY=I-D.ietf-quic-manageability}},
-{{?EFFECT-ENCRYPT=I-D.mm-wg-effect-encrypt}}, and
-{{?TRANSPORT-ENCRYPT=I-D.fairhurst-tsvwg-transport-encrypt}}, discuss in
-part impacts on the third-party use of wire images caused by a migration from
-protocols whose wire images are largely not confidentiality protected (e.g.
-HTTP over TCP) to protocols whose wire images are confidentiality protected
-(e.g. H2 over QUIC).
+The increasing deployment of transport-layer security {{?RFC8226}} to protect
+application-layer headers and payload, as well as the definition and deployment
+of QUIC {{?I-D.ietf-quic-transport}}, a transport protocol which encrypts most
+of its own control information, bring new relevance to this question. QUIC is,
+in effect, the first IETF-defined transport protocol to take care of the
+minimization of its own wire image, for reasons of ossification prevention as
+well as reducing information radiation off the protocol for end-to-end privacy.
 
-This document presents the wire image abstraction with the hope that it can
-shed some light on these discussions.
+The flipside of this trend is the impact of a less visible wire image on various
+functions driven by third-party observation of the wire image. {{?RFC8404}}
+examines this issue from a network operator's viewpoint, and
+{{?I-D.ietf-tsvwg-transport-encrypt}} focuses on transport-layer implications of
+increasing encryption. {{?I-D.ietf-quic-manageability}} is, in part, a
+third-party user's guide to the QUIC wire image. In contrast to those documents,
+this draft treats the wire image as a pure abstraction, with the hope that it
+can shed some light on these discussions.
 
 # Definition
 
@@ -83,8 +87,9 @@ sent.
 
 # Discussion
 
-This definition is so vague as to be difficult to apply to protocol analysis,
-but it does illustrate some important properties of the wire image.
+This definition appears at first glance to be so impractically formal as to be
+difficult to apply to protocol analysis, but it does illustrate some important
+properties of the wire image.
 
 Key is that the wire image is not limited to merely "the unencrypted bits in the
 header". In particular, interpacket timing, packet size, and message sequence
