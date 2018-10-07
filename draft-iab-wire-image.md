@@ -1,7 +1,7 @@
 ---
 title: The Wire Image of a Network Protocol
 abbrev: Wire Image
-docname: draft-trammell-wire-image-latest
+docname: draft-iab-wire-image-latest
 date:
 category: info
 
@@ -61,36 +61,41 @@ discuss in this document. It is the wire image, not the protocol's
 specification, that determines how third parties on the network paths among
 protocol participants will interact with that protocol.
 
-Several documents currently under discussion in IETF working groups and the
-IETF in general, for example
-{{?QUIC-MANAGEABILITY=I-D.ietf-quic-manageability}},
-{{?EFFECT-ENCRYPT=I-D.mm-wg-effect-encrypt}}, and
-{{?TRANSPORT-ENCRYPT=I-D.fairhurst-tsvwg-transport-encrypt}}, discuss in
-part impacts on the third-party use of wire images caused by a migration from
-protocols whose wire images are largely not confidentiality protected (e.g.
-HTTP over TCP) to protocols whose wire images are confidentiality protected
-(e.g. H2 over QUIC).
+The increasing deployment of transport-layer security {{?RFC8226}} to protect
+application-layer headers and payload, as well as the definition and deployment
+of QUIC {{?I-D.ietf-quic-transport}}, a transport protocol which encrypts most
+of its own control information, bring new relevance to this question. QUIC is,
+in effect, the first IETF-defined transport protocol to take care of the
+minimization of its own wire image, to prevent ossification and improve
+end-to-end privacy by reducing information radiation.
 
-This document presents the wire image abstraction with the hope that it can
-shed some light on these discussions.
+The flipside of this trend is the impact of a less visible wire image on various
+functions driven by third-party observation of the wire image. {{?RFC8404}}
+examines this issue from a network operator's viewpoint, and
+{{?I-D.ietf-tsvwg-transport-encrypt}} focuses on transport-layer implications of
+increasing encryption. {{?I-D.ietf-quic-manageability}} is, in part, a
+third-party user's guide to the QUIC wire image. In contrast to those documents,
+this draft treats the wire image as a pure abstraction, with the hope that it
+can shed some light on these discussions.
 
 # Definition
 
-More formally, the wire image of a protocol consists of the sequence of
-messages sent by each participant in the protocol, each expressed as a
-sequence of bits with an associated arbitrary-precision time at which it was
-sent.
+More formally, the wire image of the set of protocols in use for a communication
+observed at a given point in the network consists of the sequence of packets
+sent by each participant in the communication, each expressed as a sequence of
+bits with the associated arbitrary-precision time at which the packet was observed.
 
 # Discussion
 
-This definition is so vague as to be difficult to apply to protocol analysis,
-but it does illustrate some important properties of the wire image.
+This definition appears at first glance to be so impractically formal as to be
+difficult to apply to protocol analysis, but it does illustrate some important
+properties of the wire image.
 
 Key is that the wire image is not limited to merely "the unencrypted bits in the
-header". In particular, interpacket timing, packet size, and message sequence
-information can be used to infer other parameters of the behavior of the
-protocol, or to fingerprint protocols and/or specific implementations of the
-protocol; see {{time-and-size}}.
+header". In particular, the sequences of interpacket timing and packet sizes can
+also be used to infer other parameters of the behavior of the protocols in use,
+or to fingerprint protocols and/or specific implementations of those protocols;
+see {{time-and-size}}.
 
 An important implication of this property is that a protocol which uses
 confidentiality protection for the headers it needs to operate can be
@@ -98,27 +103,52 @@ deliberately designed to have a specified wire image that is separate from
 that machinery; see {{engineering}}. Note that this is a capability unique to
 encrypted protocols. Parts of a wire image may also be made visible to devices
 on path, but immutable through end-to-end integrity protection; see
-{{integrity}}.
+{{integrity}}. 
 
-Portions of the wire image of a protocol that are neither
+Portions of the wire image of a protocol stack that are neither
 confidentiality-protected nor integrity-protected are writable by devices on
-the path(s) between the endpoints using the protocol. A protocol with a wire
+the path(s) between the endpoints using the protocols. A protocol with a wire
 image that is largely writable operating over a path with devices that
 understand the semantics of the protocol's wire image can modify it, in order
 to induce behaviors at the protocol's participants. This is the case with TCP
 in the current Internet.
 
+For a given packet observed at a given point in the network, the wire image
+contains information from the entire stack of protocols in use at that
+observation point. Confidentiality and integrity protection may be added at
+multiple layers in the stack. However, information at the transport layer and
+above is presumed to be delivered end-to-end in the the Internet architecture.
+For example, MAC-layer integrity and confidentiality protection do not prevent
+modification by the devices terminating those security associations, or by
+devices on different segments of the path. This document therefore does not
+concern itself directly with portions of the wire image below the network layer.
+
+## The Extent of the Wire Image
+
+While we begin this definition as the properties of a sequence of packets in
+isolation, this is not how wire images are typically used by passive observers.
+A passive observer will generally consider the union of all the information in
+the wire image in all the packets generated by a given conversation.
+
+Similarly, the wire image of a single protocol is rarely seen in isolation. The
+dynamics of the application and network stacks on each endpoint use multiple
+protocols for any higher level task. Most protocols involving user content, for
+example, are often seen on the wire together with DNS traffic; the information
+from the wire image from each protocol in use for a given communication can be
+correlated to infer information about the dynamics of the overlying application.
+
+Information from protocol wire images is also not generally used on its
+own, but is rather additionally correlated with other context information
+available to the observer: e.g. information about other communications engaged
+in by each endpoint, information about the implementations of the protocols at
+each endpoint, information about the network and internetwork topology near
+those endpoints, and so on. This context can be used together with information
+from the wire image to reach more detailed inferences about endpoint and
+end-user behavior.
+
 Note also that the wire image is multidimensional. This implies that the name
 "image" is not merely metaphorical, and that general image recognition
 techniques may be applicable to extracting patterns and information from it.
-
-From the point of view of a passive observer, the wire image of a single
-protocol is rarely seen in isolation. The dynamics of the application and
-network stacks on each endpoint use multiple protocols for any higher level
-task. Most protocols involving user content, for example, are often seen on
-the wire together with DNS traffic; the information from these two wire images
-can be correlated to infer information about the dynamics of the overlying
-application.
 
 ## Obscuring timing and sizing information {#time-and-size}
 
@@ -155,7 +185,7 @@ consequence of the network's operation. Intermediate systems with knowledge of
 the protocol semantics in the readable portion of the wire image can also
 purposely delay or drop packets in order to affect the protocol's operation.
 
-## Engineering the Wire Image {#engineering}
+# Engineering the Wire Image {#engineering}
 
 Understanding the nature of a protocol's wire image allows it to be
 engineered. The general principle at work here, observed through experience
@@ -204,14 +234,14 @@ information needed to support decryption by the receiving endpoint
 (cryptographic handshakes, sequence numbers, and so on) may be used by devices
 along the path for their own purposes.
 
-### Declaring Protocol Invariants
+## Declaring Protocol Invariants
 
-One approach to reduce the extent of the wire image that will be used by
-devices on the path is to define a set of invariants for a protocol during its
-development. Declaring a protocol's invariants represents a promise made by
+One potential approach to reduce the extent of the wire image that will be used
+by devices on the path is to define a set of invariants for a protocol during
+its development. Declaring a protocol's invariants represents a promise made by
 the protocol's developers that certain bits in the wire image, and behaviors
-observable in the wire image, will be preserved through the specification of
-all future versions of the protocol. QUIC's invariants
+observable in the wire image, will be preserved through the specification of all
+future versions of the protocol. QUIC's invariants
 {{?QUIC-INVARIANTS=I-D.ietf-quic-invariants}} are an initial attempt to apply
 this approach to QUIC.
 
@@ -241,11 +271,10 @@ confidentiality. When confidentiality protection is either not possible or not
 practical, then, as above, the approaches discussed in {{USE-IT}} may be
 useful in ossification prevention.
 
-
-### Trustworthiness of Engineered Signals
+## Trustworthiness of Engineered Signals
 
 Since they are separate from the signals that drive an encrypted protocol's
-mechanisms, the veracity of integrity-protected signals in an engineered wire
+mechanisms, the accuracy of integrity-protected signals in an engineered wire
 image intended for consumption by the path may not be verifiable by on-path
 devices; see {{PATH-SIGNALS}}. Indeed, any two endpoints with a secret channel
 between them (in this case, the encrypted protocol itself) may collude to
@@ -256,9 +285,9 @@ headers.
 
 # Acknowledgments
 
-Thanks to Martin Thomson, Thomas Fossati, Ted Hardie, Mark Nottingham, and the
-membership of the IAB Stack Evolution Program, for text, feedback, and
-discussions that have improved this document.
+Thanks to Martin Thomson, Stephen Farrell, Thomas Fossati, Ted Hardie, Mark
+Nottingham, Tommy Pauly, and the membership of the IAB Stack Evolution Program,
+for text, feedback, and discussions that have improved this document.
 
 This work is partially supported by the European Commission under Horizon 2020
 grant agreement no. 688421 Measurement and Architecture for a Middleboxed
