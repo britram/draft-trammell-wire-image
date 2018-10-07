@@ -5,11 +5,11 @@
 Network Working Group                                        B. Trammell
 Internet-Draft                                             M. Kuehlewind
 Intended status: Informational                                ETH Zurich
-Expires: October 12, 2018                                 April 10, 2018
+Expires: April 10, 2019                                 October 07, 2018
 
 
                   The Wire Image of a Network Protocol
-                    draft-trammell-wire-image-latest
+                      draft-iab-wire-image-latest
 
 Abstract
 
@@ -34,7 +34,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on October 12, 2018.
+   This Internet-Draft will expire on April 10, 2019.
 
 Copyright Notice
 
@@ -53,9 +53,9 @@ Copyright Notice
 
 
 
-Trammell & Kuehlewind   Expires October 12, 2018                [Page 1]
+Trammell & Kuehlewind    Expires April 10, 2019                 [Page 1]
 
-Internet-Draft                 Wire Image                     April 2018
+Internet-Draft                 Wire Image                   October 2018
 
 
 1.  Introduction
@@ -80,76 +80,120 @@ Internet-Draft                 Wire Image                     April 2018
    network paths among protocol participants will interact with that
    protocol.
 
-   Several documents currently under discussion in IETF working groups
-   and the IETF in general, for example [QUIC-MANAGEABILITY],
-   [EFFECT-ENCRYPT], and [TRANSPORT-ENCRYPT], discuss in part impacts on
-   the third-party use of wire images caused by a migration from
-   protocols whose wire images are largely not confidentiality protected
-   (e.g.  HTTP over TCP) to protocols whose wire images are
-   confidentiality protected (e.g.  H2 over QUIC).
+   The increasing deployment of transport-layer security [RFC8226] to
+   protect application-layer headers and payload, as well as the
+   definition and deployment of QUIC [I-D.ietf-quic-transport], a
+   transport protocol which encrypts most of its own control
+   information, bring new relevance to this question.  QUIC is, in
+   effect, the first IETF-defined transport protocol to take care of the
+   minimization of its own wire image, to prevent ossification and
+   improve end-to-end privacy by reducing information radiation.
 
-   This document presents the wire image abstraction with the hope that
-   it can shed some light on these discussions.
+   The flipside of this trend is the impact of a less visible wire image
+   on various functions driven by third-party observation of the wire
+   image.  [RFC8404] examines this issue from a network operator's
+   viewpoint, and [I-D.ietf-tsvwg-transport-encrypt] focuses on
+   transport-layer implications of increasing encryption.
+   [I-D.ietf-quic-manageability] is, in part, a third-party user's guide
+   to the QUIC wire image.  In contrast to those documents, this draft
+   treats the wire image as a pure abstraction, with the hope that it
+   can shed some light on these discussions.
 
 2.  Definition
 
-   More formally, the wire image of a protocol consists of the sequence
-   of messages sent by each participant in the protocol, each expressed
-   as a sequence of bits with an associated arbitrary-precision time at
-   which it was sent.
+   More formally, the wire image of the set of protocols in use for a
+   communication observed at a given point in the network consists of
+   the sequence of packets sent by each participant in the
+   communication, each expressed as a sequence of bits with the
+   associated arbitrary-precision time at which the packet was observed.
+
+
+
+Trammell & Kuehlewind    Expires April 10, 2019                 [Page 2]
+
+Internet-Draft                 Wire Image                   October 2018
+
 
 3.  Discussion
 
-   This definition is so vague as to be difficult to apply to protocol
-   analysis, but it does illustrate some important properties of the
-   wire image.
+   This definition appears at first glance to be so impractically formal
+   as to be difficult to apply to protocol analysis, but it does
+   illustrate some important properties of the wire image.
 
    Key is that the wire image is not limited to merely "the unencrypted
-   bits in the header".  In particular, interpacket timing, packet size,
-
-
-
-Trammell & Kuehlewind   Expires October 12, 2018                [Page 2]
-
-Internet-Draft                 Wire Image                     April 2018
-
-
-   and message sequence information can be used to infer other
-   parameters of the behavior of the protocol, or to fingerprint
-   protocols and/or specific implementations of the protocol; see
-   Section 3.1.
+   bits in the header".  In particular, the sequences of interpacket
+   timing and packet sizes can also be used to infer other parameters of
+   the behavior of the protocols in use, or to fingerprint protocols
+   and/or specific implementations of those protocols; see Section 3.2.
 
    An important implication of this property is that a protocol which
    uses confidentiality protection for the headers it needs to operate
    can be deliberately designed to have a specified wire image that is
-   separate from that machinery; see Section 3.3.  Note that this is a
+   separate from that machinery; see Section 4.  Note that this is a
    capability unique to encrypted protocols.  Parts of a wire image may
    also be made visible to devices on path, but immutable through end-
-   to-end integrity protection; see Section 3.2.
+   to-end integrity protection; see Section 3.3.
 
-   Portions of the wire image of a protocol that are neither
+   Portions of the wire image of a protocol stack that are neither
    confidentiality-protected nor integrity-protected are writable by
-   devices on the path(s) between the endpoints using the protocol.  A
+   devices on the path(s) between the endpoints using the protocols.  A
    protocol with a wire image that is largely writable operating over a
    path with devices that understand the semantics of the protocol's
    wire image can modify it, in order to induce behaviors at the
    protocol's participants.  This is the case with TCP in the current
    Internet.
 
+   For a given packet observed at a given point in the network, the wire
+   image contains information from the entire stack of protocols in use
+   at that observation point.  Confidentiality and integrity protection
+   may be added at multiple layers in the stack.  However, information
+   at the transport layer and above is presumed to be delivered end-to-
+   end in the the Internet architecture.  For example, MAC-layer
+   integrity and confidentiality protection do not prevent modification
+   by the devices terminating those security associations, or by devices
+   on different segments of the path.  This document therefore does not
+   concern itself directly with portions of the wire image below the
+   network layer.
+
+3.1.  The Extent of the Wire Image
+
+   While we begin this definition as the properties of a sequence of
+   packets in isolation, this is not how wire images are typically used
+   by passive observers.  A passive observer will generally consider the
+   union of all the information in the wire image in all the packets
+   generated by a given conversation.
+
+
+
+Trammell & Kuehlewind    Expires April 10, 2019                 [Page 3]
+
+Internet-Draft                 Wire Image                   October 2018
+
+
+   Similarly, the wire image of a single protocol is rarely seen in
+   isolation.  The dynamics of the application and network stacks on
+   each endpoint use multiple protocols for any higher level task.  Most
+   protocols involving user content, for example, are often seen on the
+   wire together with DNS traffic; the information from the wire image
+   from each protocol in use for a given communication can be correlated
+   to infer information about the dynamics of the overlying application.
+
+   Information from protocol wire images is also not generally used on
+   its own, but is rather additionally correlated with other context
+   information available to the observer: e.g. information about other
+   communications engaged in by each endpoint, information about the
+   implementations of the protocols at each endpoint, information about
+   the network and internetwork topology near those endpoints, and so
+   on.  This context can be used together with information from the wire
+   image to reach more detailed inferences about endpoint and end-user
+   behavior.
+
    Note also that the wire image is multidimensional.  This implies that
    the name "image" is not merely metaphorical, and that general image
    recognition techniques may be applicable to extracting patterns and
    information from it.
 
-   From the point of view of a passive observer, the wire image of a
-   single protocol is rarely seen in isolation.  The dynamics of the
-   application and network stacks on each endpoint use multiple
-   protocols for any higher level task.  Most protocols involving user
-   content, for example, are often seen on the wire together with DNS
-   traffic; the information from these two wire images can be correlated
-   to infer information about the dynamics of the overlying application.
-
-3.1.  Obscuring timing and sizing information
+3.2.  Obscuring timing and sizing information
 
    Cryptography can protect the confidentiality of a protocol's headers,
    to the extent that forwarding devices do not need the
@@ -162,25 +206,26 @@ Internet-Draft                 Wire Image                     April 2018
    faster than processing time requirements at the sender allow, a
    sender may use padding to increase the size of packets, and add delay
    to transmission scheduling in order to increase interpacket delay.
-
-
-
-Trammell & Kuehlewind   Expires October 12, 2018                [Page 3]
-
-Internet-Draft                 Wire Image                     April 2018
-
-
    However, it does this as the expense of bandwidth efficiency and
    latency, so this technique is limited to the application's tolerance
    for latency and bandwidth inefficiency.
 
-3.2.  Integrity Protection of the Wire Image
+3.3.  Integrity Protection of the Wire Image
 
    Adding end-to-end integrity protection to portions of the wire image
    makes it impossible for on-path devices to modify them without
    detection by the endpoints, which can then take action in response to
    those modifications, making these portions of the wire image
    effectively immutable.  However, they can still be observed by
+
+
+
+
+Trammell & Kuehlewind    Expires April 10, 2019                 [Page 4]
+
+Internet-Draft                 Wire Image                   October 2018
+
+
    devices on path.  This allows the creation of signals intended by the
    endpoints solely for the consumption of these on-path devices.
 
@@ -197,7 +242,7 @@ Internet-Draft                 Wire Image                     April 2018
    wire image can also purposely delay or drop packets in order to
    affect the protocol's operation.
 
-3.3.  Engineering the Wire Image
+4.  Engineering the Wire Image
 
    Understanding the nature of a protocol's wire image allows it to be
    engineered.  The general principle at work here, observed through
@@ -217,15 +262,6 @@ Internet-Draft                 Wire Image                     April 2018
    transport protocol.  As described in [PATH-SIGNALS], several key in-
    network functions have evolved to take advantage of implicit signals
    in TCP's wire image, which, as TCP provides neither integrity or
-
-
-
-
-Trammell & Kuehlewind   Expires October 12, 2018                [Page 4]
-
-Internet-Draft                 Wire Image                     April 2018
-
-
    confidentiality protection for its headers, is inseparable from its
    internal operation.  Some of these include:
 
@@ -238,6 +274,14 @@ Internet-Draft                 Wire Image                     April 2018
 
    o  Measuring loss and latency: For example, examining the sequence of
       TCP's sequence and acknowledgement numbers, as well as the ECN
+
+
+
+Trammell & Kuehlewind    Expires April 10, 2019                 [Page 5]
+
+Internet-Draft                 Wire Image                   October 2018
+
+
       [RFC3168] control bits allows the inference of congestion, loss
       and retransmission along the path.  The sequence and
       acknowledgement numbers together with the timestamp option
@@ -260,28 +304,20 @@ Internet-Draft                 Wire Image                     April 2018
    sequence numbers, and so on) may be used by devices along the path
    for their own purposes.
 
-3.3.1.  Declaring Protocol Invariants
+4.1.  Declaring Protocol Invariants
 
-   One approach to reduce the extent of the wire image that will be used
-   by devices on the path is to define a set of invariants for a
-   protocol during its development.  Declaring a protocol's invariants
-   represents a promise made by the protocol's developers that certain
-   bits in the wire image, and behaviors observable in the wire image,
-   will be preserved through the specification of all future versions of
-   the protocol.  QUIC's invariants [QUIC-INVARIANTS] are an initial
-   attempt to apply this approach to QUIC.
+   One potential approach to reduce the extent of the wire image that
+   will be used by devices on the path is to define a set of invariants
+   for a protocol during its development.  Declaring a protocol's
+   invariants represents a promise made by the protocol's developers
+   that certain bits in the wire image, and behaviors observable in the
+   wire image, will be preserved through the specification of all future
+   versions of the protocol.  QUIC's invariants [QUIC-INVARIANTS] are an
+   initial attempt to apply this approach to QUIC.
 
    While static aspects of the wire image - bits with simple semantics
    at fixed positions in protocol headers - can easily be made
    invariant, different aspects of the wire image may be more or less
-
-
-
-Trammell & Kuehlewind   Expires October 12, 2018                [Page 5]
-
-Internet-Draft                 Wire Image                     April 2018
-
-
    appropriate to define as invariants.  For a protocol with a version
    and/or extension negotiation mechanism, the bits in the header and
    behaviors tied to those bits which implement version negotiation
@@ -294,6 +330,14 @@ Internet-Draft                 Wire Image                     April 2018
    "accidental invariance": the deployment of on-path devices over time
    that make simplifying assumptions about the behavior of those parts
    of the wire image, making new behaviors not meeting those assumptions
+
+
+
+Trammell & Kuehlewind    Expires April 10, 2019                 [Page 6]
+
+Internet-Draft                 Wire Image                   October 2018
+
+
    difficult to deploy.  Integrity protection of the wire image may
    itself help protect against accidental invariance, because read-only
    wire images invite less meddling than path-writable wire images.  The
@@ -306,10 +350,10 @@ Internet-Draft                 Wire Image                     April 2018
    possible or not practical, then, as above, the approaches discussed
    in [USE-IT] may be useful in ossification prevention.
 
-3.3.2.  Trustworthiness of Engineered Signals
+4.2.  Trustworthiness of Engineered Signals
 
    Since they are separate from the signals that drive an encrypted
-   protocol's mechanisms, the veracity of integrity-protected signals in
+   protocol's mechanisms, the accuracy of integrity-protected signals in
    an engineered wire image intended for consumption by the path may not
    be verifiable by on-path devices; see [PATH-SIGNALS].  Indeed, any
    two endpoints with a secret channel between them (in this case, the
@@ -319,11 +363,12 @@ Internet-Draft                 Wire Image                     April 2018
    operation afforded by confidentiality protection of the protocol's
    headers.
 
-4.  Acknowledgments
+5.  Acknowledgments
 
-   Thanks to Martin Thomson, Thomas Fossati, Ted Hardie, Mark
-   Nottingham, and the membership of the IAB Stack Evolution Program,
-   for text, feedback, and discussions that have improved this document.
+   Thanks to Martin Thomson, Stephen Farrell, Thomas Fossati, Ted
+   Hardie, Mark Nottingham, Tommy Pauly, and the membership of the IAB
+   Stack Evolution Program, for text, feedback, and discussions that
+   have improved this document.
 
    This work is partially supported by the European Commission under
    Horizon 2020 grant agreement no. 688421 Measurement and Architecture
@@ -331,19 +376,34 @@ Internet-Draft                 Wire Image                     April 2018
    for Education, Research, and Innovation under contract no. 15.0268.
    This support does not imply endorsement.
 
+6.  Informative References
+
+   [I-D.ietf-quic-manageability]
+              Kuehlewind, M. and B. Trammell, "Manageability of the QUIC
+              Transport Protocol", draft-ietf-quic-manageability-02
+              (work in progress), July 2018.
 
 
-Trammell & Kuehlewind   Expires October 12, 2018                [Page 6]
+
+
+
+
+
+Trammell & Kuehlewind    Expires April 10, 2019                 [Page 7]
 
-Internet-Draft                 Wire Image                     April 2018
+Internet-Draft                 Wire Image                   October 2018
 
 
-5.  Informative References
+   [I-D.ietf-quic-transport]
+              Iyengar, J. and M. Thomson, "QUIC: A UDP-Based Multiplexed
+              and Secure Transport", draft-ietf-quic-transport-15 (work
+              in progress), October 2018.
 
-   [EFFECT-ENCRYPT]
-              Moriarty, K. and A. Morton, "Effects of Pervasive
-              Encryption on Operators", draft-mm-wg-effect-encrypt-25
-              (work in progress), March 2018.
+   [I-D.ietf-tsvwg-transport-encrypt]
+              Fairhurst, G. and C. Perkins, "The Impact of Transport
+              Header Confidentiality on Network Operation and Evolution
+              of the Internet", draft-ietf-tsvwg-transport-encrypt-00
+              (work in progress), September 2018.
 
    [PATH-SIGNALS]
               Hardie, T., "Path Signals", draft-hardie-path-signals-03
@@ -351,13 +411,8 @@ Internet-Draft                 Wire Image                     April 2018
 
    [QUIC-INVARIANTS]
               Thomson, M., "Version-Independent Properties of QUIC",
-              draft-ietf-quic-invariants-01 (work in progress), March
-              2018.
-
-   [QUIC-MANAGEABILITY]
-              Kuehlewind, M. and B. Trammell, "Manageability of the QUIC
-              Transport Protocol", draft-ietf-quic-manageability-01
-              (work in progress), October 2017.
+              draft-ietf-quic-invariants-02 (work in progress),
+              September 2018.
 
    [RFC0793]  Postel, J., "Transmission Control Protocol", STD 7,
               RFC 793, DOI 10.17487/RFC0793, September 1981,
@@ -373,25 +428,26 @@ Internet-Draft                 Wire Image                     April 2018
               RFC 7323, DOI 10.17487/RFC7323, September 2014,
               <https://www.rfc-editor.org/info/rfc7323>.
 
-   [TRANSPORT-ENCRYPT]
-              Fairhurst, G. and C. Perkins, "The Impact of Transport
-              Header Confidentiality on Network Operation and Evolution
-              of the Internet", draft-fairhurst-tsvwg-transport-
-              encrypt-07 (work in progress), April 2018.
+   [RFC8226]  Peterson, J. and S. Turner, "Secure Telephone Identity
+              Credentials: Certificates", RFC 8226,
+              DOI 10.17487/RFC8226, February 2018,
+              <https://www.rfc-editor.org/info/rfc8226>.
+
+   [RFC8404]  Moriarty, K., Ed. and A. Morton, Ed., "Effects of
+              Pervasive Encryption on Operators", RFC 8404,
+              DOI 10.17487/RFC8404, July 2018,
+              <https://www.rfc-editor.org/info/rfc8404>.
 
    [USE-IT]   Thomson, M., "Long-term Viability of Protocol Extension
-              Mechanisms", draft-thomson-use-it-or-lose-it-01 (work in
-              progress), March 2018.
+              Mechanisms", draft-thomson-use-it-or-lose-it-02 (work in
+              progress), June 2018.
 
 
 
 
-
-
-
-Trammell & Kuehlewind   Expires October 12, 2018                [Page 7]
+Trammell & Kuehlewind    Expires April 10, 2019                 [Page 8]
 
-Internet-Draft                 Wire Image                     April 2018
+Internet-Draft                 Wire Image                   October 2018
 
 
 Authors' Addresses
@@ -445,4 +501,4 @@ Authors' Addresses
 
 
 
-Trammell & Kuehlewind   Expires October 12, 2018                [Page 8]
+Trammell & Kuehlewind    Expires April 10, 2019                 [Page 9]
