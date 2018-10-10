@@ -113,6 +113,14 @@ understand the semantics of the protocol's wire image can modify it, in order
 to induce behaviors at the protocol's participants. This is the case with TCP
 in the current Internet.
 
+The term "wire image" can be applied in different scopes: the wire image of a
+single packet refers to the information derivable from observing that one packet
+in isolation; the wire image of a single protocol refers to the information
+derivable from observing only the headers belonging to that protocol on a
+sequence of packets, in isolation from other protocols in use for a
+communication. In general, it refers to everything observable about a
+communication at a given vantage point; see {{extent}} for more.
+
 For a given packet observed at a given point in the network, the wire image
 contains information from the entire stack of protocols in use at that
 observation point. Confidentiality and integrity protection may be added at
@@ -123,7 +131,7 @@ modification by the devices terminating those security associations, or by
 devices on different segments of the path. This document therefore does not
 concern itself directly with portions of the wire image below the network layer.
 
-## The Extent of the Wire Image
+## The Extent of the Wire Image {#extent}
 
 While we begin this definition as the properties of a sequence of packets in
 isolation, this is not how wire images are typically used by passive observers.
