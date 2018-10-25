@@ -54,48 +54,45 @@ toward nonparticipant observers of the messages sent among participants, often
 including participants in lower layer protocols. Any information that has a
 clear definition in the protocol's message format(s), or is implied by that
 definition, and is not cryptographically confidentiality-protected can be
-unambiguously interpreted by those observers.
+unambiguously interpreted by those observers. This information comprises the
+protocol's wire image, which we define and discuss in this document. 
 
-This information comprises the protocol's wire image, which we define and
-discuss in this document. It is the wire image, not the protocol's
-specification, that determines how third parties on the network paths among
-protocol participants will interact with that protocol.
+It is the wire image, not the protocol's specification, that determines how
+third parties on the network paths among protocol participants will interact
+with that protocol.
 
 The increasing deployment of transport-layer security {{?RFC8226}} to protect
 application-layer headers and payload, as well as the definition and deployment
-of QUIC {{?I-D.ietf-quic-transport}}, a transport protocol which encrypts most
+of QUIC {{?QUIC=I-D.ietf-quic-transport}}, a transport protocol which encrypts most
 of its own control information, bring new relevance to this question. QUIC is,
 in effect, the first IETF-defined transport protocol to take care of the
 minimization of its own wire image, to prevent ossification and improve
 end-to-end privacy by reducing information radiation.
 
 The flipside of this trend is the impact of a less visible wire image on various
-functions driven by third-party observation of the wire image. {{?RFC8404}}
-examines this issue from a network operator's viewpoint, and
-{{?I-D.ietf-tsvwg-transport-encrypt}} focuses on transport-layer implications of
-increasing encryption. {{?I-D.ietf-quic-manageability}} is, in part, a
-third-party user's guide to the QUIC wire image. In contrast to those documents,
-this draft treats the wire image as a pure abstraction, with the hope that it
-can shed some light on these discussions.
+functions driven by third-party observation of the wire image. In contrast to
+ongoing discussions about this tussle, this draft treats the wire image as a
+pure abstraction, with the hope that it can shed some light on these
+discussions.
 
 # Definition
 
-More formally, the wire image of the set of protocols in use for a communication
-observed at a given point in the network consists of the sequence of packets
-sent by each participant in the communication, each expressed as a sequence of
-bits with the associated arbitrary-precision time at which the packet was observed.
+The wire image of the set of protocols in use for a given communication is the
+view of that set of protocols as observed by an entity not participating in the
+communication. It is the sequence of packets sent by each participant in the
+communication, including the content of those packets and metadata about the
+observation itself, including the time at which each packet is observed and the
+vantage point of the observer.
 
 # Discussion
 
-This definition appears at first glance to be so impractically formal as to be
-difficult to apply to protocol analysis, but it does illustrate some important
-properties of the wire image.
+This definition illustrates some important properties of the wire image.
 
 Key is that the wire image is not limited to merely "the unencrypted bits in the
-header". In particular, the sequences of interpacket timing and packet sizes can
-also be used to infer other parameters of the behavior of the protocols in use,
-or to fingerprint protocols and/or specific implementations of those protocols;
-see {{time-and-size}}.
+header". In particular, the metadata, as sequences of interpacket timing and
+packet sizes, can also be used to infer other parameters of the behavior of the
+protocols in use, or to fingerprint protocols and/or specific implementations of
+those protocols; see {{time-and-size}}.
 
 An important implication of this property is that a protocol which uses
 confidentiality protection for the headers it needs to operate can be
@@ -106,30 +103,33 @@ on path, but immutable through end-to-end integrity protection; see
 {{integrity}}. 
 
 Portions of the wire image of a protocol stack that are neither
-confidentiality-protected nor integrity-protected are writable by devices on
-the path(s) between the endpoints using the protocols. A protocol with a wire
-image that is largely writable operating over a path with devices that
-understand the semantics of the protocol's wire image can modify it, in order
-to induce behaviors at the protocol's participants. This is the case with TCP
-in the current Internet.
+confidentiality-protected nor integrity-protected are writable by devices on the
+path(s) between the endpoints using the protocols. A protocol with a wire image
+that is largely writable operating over a path with devices that understand the
+semantics of the protocol's wire image can modify it, in order to induce
+behaviors at the protocol's participants. TCP is one such protocol in the
+current Internet.
 
 The term "wire image" can be applied in different scopes: the wire image of a
 single packet refers to the information derivable from observing that one packet
 in isolation; the wire image of a single protocol refers to the information
 derivable from observing only the headers belonging to that protocol on a
 sequence of packets, in isolation from other protocols in use for a
-communication. In general, it refers to everything observable about a
-communication at a given vantage point; see {{extent}} for more.
+communication. See {{extent}} for more.
 
 For a given packet observed at a given point in the network, the wire image
 contains information from the entire stack of protocols in use at that
-observation point. Confidentiality and integrity protection may be added at
-multiple layers in the stack. However, information at the transport layer and
-above is presumed to be delivered end-to-end in the the Internet architecture.
-For example, MAC-layer integrity and confidentiality protection do not prevent
-modification by the devices terminating those security associations, or by
-devices on different segments of the path. This document therefore does not
-concern itself directly with portions of the wire image below the network layer.
+observation point. This implies that the wire image depends on the observer as
+well: each observer may see a slightly different image of the same
+communication. 
+
+In this document, we assume that only information at the transport layer and
+above is delivered end-to-end, and focus on the "Internet" wire image: that
+portion of the wire image at the network layer and above. While confidentiality
+and integrity protection may be added at multiple layers in the stack, MAC-layer
+integrity and confidentiality protection do not prevent modification by the
+devices terminating those security associations, or by devices on different
+segments of the path. 
 
 ## The Extent of the Wire Image {#extent}
 
@@ -162,15 +162,14 @@ techniques may be applicable to extracting patterns and information from it.
 
 Cryptography can protect the confidentiality of a protocol's headers, to the
 extent that forwarding devices do not need the confidentiality-protected
-information for basic forwarding operations. However, it cannot be applied to
-protecting non-header information in the wire image. Of particular interest is
-the sequence of packet sizes and the sequence of packet times. These are
-characteristic of the operation of the protocol. While packets cannot be made
-smaller than their information content, nor sent faster than processing time
-requirements at the sender allow, a sender may use padding to increase the
-size of packets, and add delay to transmission scheduling in order to increase
-interpacket delay. However, it does this as the expense of bandwidth
-efficiency and latency, so this technique is limited to the application's
+information for basic forwarding operations. Ciphersuites and other transmission
+techniques designed to prevent timing analysis can also be applied at the sender
+to reduce the information content of the metadata portion of the wire image.
+However, there are limits to these techniques. Packets cannot be made smaller
+than their information content, sent faster than processing time requirements at
+the sender allow, or transmitted through the network faster than a factor less
+than one of the speed of light. Since these techniques operate at the expense of
+bandwidth efficiency and latency, they are also limited to the application's
 tolerance for latency and bandwidth inefficiency.
 
 ## Integrity Protection of the Wire Image {#integrity}
@@ -228,19 +227,18 @@ of these include:
   timestamp option {{?RFC7323}} allow the measurement of
   application-experienced latency.
 
-During the design of a protocol, the utility of features such as these shoud
-be considered, and the protocol's wire image should therefore be designed to
-explicitly expose information to those network functions deemed important by
-the designers in an obvious way. The wire image should expose as little other
-information as possible.
+During the design of a protocol, the utility of features such as these should
+be considered.  The protocol's wire image can be designed to explicitly expose
+information to those network functions deemed important by the designers. The
+wire image should expose as little other information as possible.
 
 However, even when information is explicitly provided to the network, any
 information that is exposed by the wire image, even that information not
-intended to be consumed by an observer, must be designed carefully as it might
-ossify, making it immutable for future versions of the protocol. For example,
-information needed to support decryption by the receiving endpoint
-(cryptographic handshakes, sequence numbers, and so on) may be used by devices
-along the path for their own purposes.
+intended to be consumed by an observer, must be designed carefully, as deployed
+network functions using that information may render it immutable for future
+versions of the protocol. For example, information needed to support decryption
+by the receiving endpoint (cryptographic handshakes, sequence numbers, and so
+on) may be used by devices along the path for their own purposes.
 
 ## Declaring Protocol Invariants
 
