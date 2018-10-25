@@ -300,7 +300,7 @@ ul.toc li {
 
   <meta name="dct.creator" content="Trammell, B. and M. Kuehlewind" />
   <meta name="dct.identifier" content="urn:ietf:id:draft-iab-wire-image-latest" />
-  <meta name="dct.issued" scheme="ISO8601" content="2018-10-10" />
+  <meta name="dct.issued" scheme="ISO8601" content="2018-10-25" />
   <meta name="dct.abstract" content="This document defines the wire image, an abstraction of the information available to an on-path non-participant in a networking protocol. This abstraction is intended to shed light on the implications on increased encryption has for network functions that use the wire image." />
   <meta name="description" content="This document defines the wire image, an abstraction of the information available to an on-path non-participant in a networking protocol. This abstraction is intended to shed light on the implications on increased encryption has for network functions that use the wire image." />
 
@@ -324,8 +324,8 @@ ul.toc li {
 <td class="right">ETH Zurich</td>
 </tr>
 <tr>
-<td class="left">Expires: April 13, 2019</td>
-<td class="right">October 10, 2018</td>
+<td class="left">Expires: April 28, 2019</td>
+<td class="right">October 25, 2018</td>
 </tr>
 
     	
@@ -341,7 +341,7 @@ ul.toc li {
 <p>This Internet-Draft is submitted in full conformance with the provisions of BCP 78 and BCP 79.</p>
 <p>Internet-Drafts are working documents of the Internet Engineering Task Force (IETF).  Note that other groups may also distribute working documents as Internet-Drafts.  The list of current Internet-Drafts is at https://datatracker.ietf.org/drafts/current/.</p>
 <p>Internet-Drafts are draft documents valid for a maximum of six months and may be updated, replaced, or obsoleted by other documents at any time.  It is inappropriate to use Internet-Drafts as reference material or to cite them other than as "work in progress."</p>
-<p>This Internet-Draft will expire on April 13, 2019.</p>
+<p>This Internet-Draft will expire on April 28, 2019.</p>
 <h1 id="rfc.copyrightnotice"><a href="#rfc.copyrightnotice">Copyright Notice</a></h1>
 <p>Copyright (c) 2018 IETF Trust and the persons identified as the document authors.  All rights reserved.</p>
 <p>This document is subject to BCP 78 and the IETF Trust's Legal Provisions Relating to IETF Documents (https://trustee.ietf.org/license-info) in effect on the date of publication of this document.  Please review these documents carefully, as they describe your rights and restrictions with respect to this document.  Code Components extracted from this document must include Simplified BSD License text as described in Section 4.e of the Trust Legal Provisions and are provided without warranty as described in the Simplified BSD License.</p>
@@ -349,23 +349,24 @@ ul.toc li {
 <a href="#rfc.section.1">1.</a> <a href="#introduction" id="introduction">Introduction</a>
 </h1>
 <p id="rfc.section.1.p.1">A protocol specification defines a set of behaviors for each participant in the protocol: which lower-layer protocols are used for which services, how messages are formatted and protected, which participant sends which message when, how each participant should respond to each message, and so on.</p>
-<p id="rfc.section.1.p.2">Implicit in a protocol specification is the information the protocol radiates toward nonparticipant observers of the messages sent among participants, often including participants in lower layer protocols. Any information that has a clear definition in the protocol&#8217;s message format(s), or is implied by that definition, and is not cryptographically confidentiality-protected can be unambiguously interpreted by those observers.</p>
-<p id="rfc.section.1.p.3">This information comprises the protocol&#8217;s wire image, which we define and discuss in this document. It is the wire image, not the protocol&#8217;s specification, that determines how third parties on the network paths among protocol participants will interact with that protocol.</p>
-<p id="rfc.section.1.p.4">The increasing deployment of transport-layer security <a href="#RFC8226" class="xref">[RFC8226]</a> to protect application-layer headers and payload, as well as the definition and deployment of QUIC <a href="#I-D.ietf-quic-transport" class="xref">[I-D.ietf-quic-transport]</a>, a transport protocol which encrypts most of its own control information, bring new relevance to this question. QUIC is, in effect, the first IETF-defined transport protocol to take care of the minimization of its own wire image, to prevent ossification and improve end-to-end privacy by reducing information radiation.</p>
-<p id="rfc.section.1.p.5">The flipside of this trend is the impact of a less visible wire image on various functions driven by third-party observation of the wire image. <a href="#RFC8404" class="xref">[RFC8404]</a> examines this issue from a network operator&#8217;s viewpoint, and <a href="#I-D.ietf-tsvwg-transport-encrypt" class="xref">[I-D.ietf-tsvwg-transport-encrypt]</a> focuses on transport-layer implications of increasing encryption. <a href="#I-D.ietf-quic-manageability" class="xref">[I-D.ietf-quic-manageability]</a> is, in part, a third-party user&#8217;s guide to the QUIC wire image. In contrast to those documents, this draft treats the wire image as a pure abstraction, with the hope that it can shed some light on these discussions.</p>
+<p id="rfc.section.1.p.2">Implicit in a protocol specification is the information the protocol radiates toward nonparticipant observers of the messages sent among participants, often including participants in lower layer protocols. Any information that has a clear definition in the protocol&#8217;s message format(s), or is implied by that definition, and is not cryptographically confidentiality-protected can be unambiguously interpreted by those observers. This information comprises the protocol&#8217;s wire image, which we define and discuss in this document.</p>
+<p id="rfc.section.1.p.3">It is the wire image, not the protocol&#8217;s specification, that determines how third parties on the network paths among protocol participants will interact with that protocol.</p>
+<p id="rfc.section.1.p.4">The increasing deployment of transport-layer security <a href="#RFC8226" class="xref">[RFC8226]</a> to protect application-layer headers and payload, as well as the definition and deployment of QUIC <a href="#QUIC" class="xref">[QUIC]</a>, a transport protocol which encrypts most of its own control information, bring new relevance to this question. QUIC is, in effect, the first IETF-defined transport protocol to take care of the minimization of its own wire image, to prevent ossification and improve end-to-end privacy by reducing information radiation.</p>
+<p id="rfc.section.1.p.5">The flipside of this trend is the impact of a less visible wire image on various functions driven by third-party observation of the wire image. In contrast to ongoing discussions about this tussle, this draft treats the wire image as a pure abstraction, with the hope that it can shed some light on these discussions.</p>
 <h1 id="rfc.section.2">
 <a href="#rfc.section.2">2.</a> <a href="#definition" id="definition">Definition</a>
 </h1>
-<p id="rfc.section.2.p.1">More formally, the wire image of the set of protocols in use for a communication observed at a given point in the network consists of the sequence of packets sent by each participant in the communication, each expressed as a sequence of bits with the associated arbitrary-precision time at which the packet was observed.</p>
+<p id="rfc.section.2.p.1">The wire image of the set of protocols in use for a given communication is the view of that set of protocols as observed by an entity not participating in the communication. It is the sequence of packets sent by each participant in the communication, including the content of those packets and metadata about the observation itself, including the time at which each packet is observed and the vantage point of the observer.</p>
 <h1 id="rfc.section.3">
 <a href="#rfc.section.3">3.</a> <a href="#discussion" id="discussion">Discussion</a>
 </h1>
-<p id="rfc.section.3.p.1">This definition appears at first glance to be so impractically formal as to be difficult to apply to protocol analysis, but it does illustrate some important properties of the wire image.</p>
-<p id="rfc.section.3.p.2">Key is that the wire image is not limited to merely &#8220;the unencrypted bits in the header&#8221;. In particular, the sequences of interpacket timing and packet sizes can also be used to infer other parameters of the behavior of the protocols in use, or to fingerprint protocols and/or specific implementations of those protocols; see <a href="#time-and-size" class="xref">Section 3.2</a>.</p>
+<p id="rfc.section.3.p.1">This definition illustrates some important properties of the wire image.</p>
+<p id="rfc.section.3.p.2">Key is that the wire image is not limited to merely &#8220;the unencrypted bits in the header&#8221;. In particular, the metadata, as sequences of interpacket timing and packet sizes, can also be used to infer other parameters of the behavior of the protocols in use, or to fingerprint protocols and/or specific implementations of those protocols; see <a href="#time-and-size" class="xref">Section 3.2</a>.</p>
 <p id="rfc.section.3.p.3">An important implication of this property is that a protocol which uses confidentiality protection for the headers it needs to operate can be deliberately designed to have a specified wire image that is separate from that machinery; see <a href="#engineering" class="xref">Section 4</a>. Note that this is a capability unique to encrypted protocols. Parts of a wire image may also be made visible to devices on path, but immutable through end-to-end integrity protection; see <a href="#integrity" class="xref">Section 3.3</a>.</p>
-<p id="rfc.section.3.p.4">Portions of the wire image of a protocol stack that are neither confidentiality-protected nor integrity-protected are writable by devices on the path(s) between the endpoints using the protocols. A protocol with a wire image that is largely writable operating over a path with devices that understand the semantics of the protocol&#8217;s wire image can modify it, in order to induce behaviors at the protocol&#8217;s participants. This is the case with TCP in the current Internet.</p>
-<p id="rfc.section.3.p.5">The term &#8220;wire image&#8221; can be applied in different scopes: the wire image of a single packet refers to the information derivable from observing that one packet in isolation; the wire image of a single protocol refers to the information derivable from observing only the headers belonging to that protocol on a sequence of packets, in isolation from other protocols in use for a communication. In general, it refers to everything observable about a communication at a given vantage point; see <a href="#extent" class="xref">Section 3.1</a> for more.</p>
-<p id="rfc.section.3.p.6">For a given packet observed at a given point in the network, the wire image contains information from the entire stack of protocols in use at that observation point. Confidentiality and integrity protection may be added at multiple layers in the stack. However, information at the transport layer and above is presumed to be delivered end-to-end in the the Internet architecture.  For example, MAC-layer integrity and confidentiality protection do not prevent modification by the devices terminating those security associations, or by devices on different segments of the path. This document therefore does not concern itself directly with portions of the wire image below the network layer.</p>
+<p id="rfc.section.3.p.4">Portions of the wire image of a protocol stack that are neither confidentiality-protected nor integrity-protected are writable by devices on the path(s) between the endpoints using the protocols. A protocol with a wire image that is largely writable operating over a path with devices that understand the semantics of the protocol&#8217;s wire image can modify it, in order to induce behaviors at the protocol&#8217;s participants. TCP is one such protocol in the current Internet.</p>
+<p id="rfc.section.3.p.5">The term &#8220;wire image&#8221; can be applied in different scopes: the wire image of a single packet refers to the information derivable from observing that one packet in isolation; the wire image of a single protocol refers to the information derivable from observing only the headers belonging to that protocol on a sequence of packets, in isolation from other protocols in use for a communication. See <a href="#extent" class="xref">Section 3.1</a> for more.</p>
+<p id="rfc.section.3.p.6">For a given packet observed at a given point in the network, the wire image contains information from the entire stack of protocols in use at that observation point. This implies that the wire image depends on the observer as well: each observer may see a slightly different image of the same communication.</p>
+<p id="rfc.section.3.p.7">In this document, we assume that only information at the transport layer and above is delivered end-to-end, and focus on the &#8220;Internet&#8221; wire image: that portion of the wire image at the network layer and above. While confidentiality and integrity protection may be added at multiple layers in the stack, MAC-layer integrity and confidentiality protection do not prevent modification by the devices terminating those security associations, or by devices on different segments of the path.</p>
 <h1 id="rfc.section.3.1">
 <a href="#rfc.section.3.1">3.1.</a> <a href="#extent" id="extent">The Extent of the Wire Image</a>
 </h1>
@@ -376,7 +377,7 @@ ul.toc li {
 <h1 id="rfc.section.3.2">
 <a href="#rfc.section.3.2">3.2.</a> <a href="#time-and-size" id="time-and-size">Obscuring timing and sizing information</a>
 </h1>
-<p id="rfc.section.3.2.p.1">Cryptography can protect the confidentiality of a protocol&#8217;s headers, to the extent that forwarding devices do not need the confidentiality-protected information for basic forwarding operations. However, it cannot be applied to protecting non-header information in the wire image. Of particular interest is the sequence of packet sizes and the sequence of packet times. These are characteristic of the operation of the protocol. While packets cannot be made smaller than their information content, nor sent faster than processing time requirements at the sender allow, a sender may use padding to increase the size of packets, and add delay to transmission scheduling in order to increase interpacket delay. However, it does this as the expense of bandwidth efficiency and latency, so this technique is limited to the application&#8217;s tolerance for latency and bandwidth inefficiency.</p>
+<p id="rfc.section.3.2.p.1">Cryptography can protect the confidentiality of a protocol&#8217;s headers, to the extent that forwarding devices do not need the confidentiality-protected information for basic forwarding operations. Ciphersuites and other transmission techniques designed to prevent timing analysis can also be applied at the sender to reduce the information content of the metadata portion of the wire image.  However, there are limits to these techniques. Packets cannot be made smaller than their information content, sent faster than processing time requirements at the sender allow, or transmitted through the network faster than a factor less than one of the speed of light. Since these techniques operate at the expense of bandwidth efficiency and latency, they are also limited to the application&#8217;s tolerance for latency and bandwidth inefficiency.</p>
 <h1 id="rfc.section.3.3">
 <a href="#rfc.section.3.3">3.3.</a> <a href="#integrity" id="integrity">Integrity Protection of the Wire Image</a>
 </h1>
@@ -394,8 +395,8 @@ ul.toc li {
 <li>Determining return routability and consent: For example, TCP&#8217;s wire image contains both an implicit indication that the sender of a packet is at least on the path toward its source address (in the acknowledgement number during the handshake), as well as an implicit indication that a receiving device consents to continue communication. These are used by stateful network firewalls.</li>
 <li>Measuring loss and latency: For example, examining the sequence of TCP&#8217;s sequence and acknowledgement numbers, as well as the ECN <a href="#RFC3168" class="xref">[RFC3168]</a> control bits allows the inference of congestion, loss and retransmission along the path. The sequence and acknowledgement numbers together with the timestamp option <a href="#RFC7323" class="xref">[RFC7323]</a> allow the measurement of application-experienced latency.</li>
 </ul>
-<p id="rfc.section.4.p.5">During the design of a protocol, the utility of features such as these shoud be considered, and the protocol&#8217;s wire image should therefore be designed to explicitly expose information to those network functions deemed important by the designers in an obvious way. The wire image should expose as little other information as possible.</p>
-<p id="rfc.section.4.p.6">However, even when information is explicitly provided to the network, any information that is exposed by the wire image, even that information not intended to be consumed by an observer, must be designed carefully as it might ossify, making it immutable for future versions of the protocol. For example, information needed to support decryption by the receiving endpoint (cryptographic handshakes, sequence numbers, and so on) may be used by devices along the path for their own purposes.</p>
+<p id="rfc.section.4.p.5">During the design of a protocol, the utility of features such as these should be considered.  The protocol&#8217;s wire image can be designed to explicitly expose information to those network functions deemed important by the designers. The wire image should expose as little other information as possible.</p>
+<p id="rfc.section.4.p.6">However, even when information is explicitly provided to the network, any information that is exposed by the wire image, even that information not intended to be consumed by an observer, must be designed carefully, as deployed network functions using that information may render it immutable for future versions of the protocol. For example, information needed to support decryption by the receiving endpoint (cryptographic handshakes, sequence numbers, and so on) may be used by devices along the path for their own purposes.</p>
 <h1 id="rfc.section.4.1">
 <a href="#rfc.section.4.1">4.1.</a> <a href="#declaring-protocol-invariants" id="declaring-protocol-invariants">Declaring Protocol Invariants</a>
 </h1>
@@ -416,24 +417,14 @@ ul.toc li {
 <a href="#rfc.references">6.</a> Informative References</h1>
 <table><tbody>
 <tr>
-<td class="reference"><b id="I-D.ietf-quic-manageability">[I-D.ietf-quic-manageability]</b></td>
-<td class="top">
-<a>Kuehlewind, M.</a> and <a>B. Trammell</a>, "<a href="https://tools.ietf.org/html/draft-ietf-quic-manageability-02">Manageability of the QUIC Transport Protocol</a>", Internet-Draft draft-ietf-quic-manageability-02, July 2018.</td>
-</tr>
-<tr>
-<td class="reference"><b id="I-D.ietf-quic-transport">[I-D.ietf-quic-transport]</b></td>
-<td class="top">
-<a>Iyengar, J.</a> and <a>M. Thomson</a>, "<a href="https://tools.ietf.org/html/draft-ietf-quic-transport-15">QUIC: A UDP-Based Multiplexed and Secure Transport</a>", Internet-Draft draft-ietf-quic-transport-15, October 2018.</td>
-</tr>
-<tr>
-<td class="reference"><b id="I-D.ietf-tsvwg-transport-encrypt">[I-D.ietf-tsvwg-transport-encrypt]</b></td>
-<td class="top">
-<a>Fairhurst, G.</a> and <a>C. Perkins</a>, "<a href="https://tools.ietf.org/html/draft-ietf-tsvwg-transport-encrypt-00">The Impact of Transport Header Confidentiality on Network Operation and Evolution of the Internet</a>", Internet-Draft draft-ietf-tsvwg-transport-encrypt-00, September 2018.</td>
-</tr>
-<tr>
 <td class="reference"><b id="PATH-SIGNALS">[PATH-SIGNALS]</b></td>
 <td class="top">
 <a>Hardie, T.</a>, "<a href="https://tools.ietf.org/html/draft-hardie-path-signals-03">Path Signals</a>", Internet-Draft draft-hardie-path-signals-03, April 2018.</td>
+</tr>
+<tr>
+<td class="reference"><b id="QUIC">[QUIC]</b></td>
+<td class="top">
+<a>Iyengar, J.</a> and <a>M. Thomson</a>, "<a href="https://tools.ietf.org/html/draft-ietf-quic-transport-16">QUIC: A UDP-Based Multiplexed and Secure Transport</a>", Internet-Draft draft-ietf-quic-transport-16, October 2018.</td>
 </tr>
 <tr>
 <td class="reference"><b id="QUIC-INVARIANTS">[QUIC-INVARIANTS]</b></td>
@@ -459,11 +450,6 @@ ul.toc li {
 <td class="reference"><b id="RFC8226">[RFC8226]</b></td>
 <td class="top">
 <a>Peterson, J.</a> and <a>S. Turner</a>, "<a href="https://tools.ietf.org/html/rfc8226">Secure Telephone Identity Credentials: Certificates</a>", RFC 8226, DOI 10.17487/RFC8226, February 2018.</td>
-</tr>
-<tr>
-<td class="reference"><b id="RFC8404">[RFC8404]</b></td>
-<td class="top">
-<a>Moriarty, K.</a> and <a>A. Morton</a>, "<a href="https://tools.ietf.org/html/rfc8404">Effects of Pervasive Encryption on Operators</a>", RFC 8404, DOI 10.17487/RFC8404, July 2018.</td>
 </tr>
 <tr>
 <td class="reference"><b id="USE-IT">[USE-IT]</b></td>
