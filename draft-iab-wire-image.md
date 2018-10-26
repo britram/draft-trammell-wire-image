@@ -81,18 +81,18 @@ The wire image of the set of protocols in use for a given communication is the
 view of that set of protocols as observed by an entity not participating in the
 communication. It is the sequence of packets sent by each participant in the
 communication, including the content of those packets and metadata about the
-observation itself, including the time at which each packet is observed and the
-vantage point of the observer.
+observation itself: the time at which each packet is observed, and the vantage
+point of the observer.
 
 # Discussion
 
 This definition illustrates some important properties of the wire image.
 
 Key is that the wire image is not limited to merely "the unencrypted bits in the
-header". In particular, the metadata, as sequences of interpacket timing and
-packet sizes, can also be used to infer other parameters of the behavior of the
-protocols in use, or to fingerprint protocols and/or specific implementations of
-those protocols; see {{time-and-size}}.
+header". In particular, the metadata, such as sequences of interpacket timing
+and packet sizes, can also be used to infer other parameters of the behavior of
+the protocols in use, or to fingerprint protocols and/or specific
+implementations of those protocols; see {{time-and-size}}.
 
 An important implication of this property is that a protocol which uses
 confidentiality protection for the headers it needs to operate can be
