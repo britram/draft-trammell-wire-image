@@ -5,7 +5,7 @@
 Network Working Group                                        B. Trammell
 Internet-Draft                                             M. Kuehlewind
 Intended status: Informational                                ETH Zurich
-Expires: April 28, 2019                                 October 25, 2018
+Expires: May 3, 2019                                    October 30, 2018
 
 
                   The Wire Image of a Network Protocol
@@ -34,7 +34,7 @@ Status of This Memo
    time.  It is inappropriate to use Internet-Drafts as reference
    material or to cite them other than as "work in progress."
 
-   This Internet-Draft will expire on April 28, 2019.
+   This Internet-Draft will expire on May 3, 2019.
 
 Copyright Notice
 
@@ -53,7 +53,7 @@ Copyright Notice
 
 
 
-Trammell & Kuehlewind    Expires April 28, 2019                 [Page 1]
+Trammell & Kuehlewind      Expires May 3, 2019                  [Page 1]
 
 Internet-Draft                 Wire Image                   October 2018
 
@@ -100,16 +100,16 @@ Internet-Draft                 Wire Image                   October 2018
    communication is the view of that set of protocols as observed by an
    entity not participating in the communication.  It is the sequence of
    packets sent by each participant in the communication, including the
-   content of those packets and metadata about the observation itself,
-   including the time at which each packet is observed and the vantage
-   point of the observer.
+   content of those packets and metadata about the observation itself:
+   the time at which each packet is observed, and the vantage point of
+   the observer.
 
 
 
 
 
 
-Trammell & Kuehlewind    Expires April 28, 2019                 [Page 2]
+Trammell & Kuehlewind      Expires May 3, 2019                  [Page 2]
 
 Internet-Draft                 Wire Image                   October 2018
 
@@ -120,11 +120,11 @@ Internet-Draft                 Wire Image                   October 2018
    image.
 
    Key is that the wire image is not limited to merely "the unencrypted
-   bits in the header".  In particular, the metadata, as sequences of
-   interpacket timing and packet sizes, can also be used to infer other
-   parameters of the behavior of the protocols in use, or to fingerprint
-   protocols and/or specific implementations of those protocols; see
-   Section 3.2.
+   bits in the header".  In particular, the metadata, such as sequences
+   of interpacket timing and packet sizes, can also be used to infer
+   other parameters of the behavior of the protocols in use, or to
+   fingerprint protocols and/or specific implementations of those
+   protocols; see Section 3.2.
 
    An important implication of this property is that a protocol which
    uses confidentiality protection for the headers it needs to operate
@@ -165,7 +165,7 @@ Internet-Draft                 Wire Image                   October 2018
 
 
 
-Trammell & Kuehlewind    Expires April 28, 2019                 [Page 3]
+Trammell & Kuehlewind      Expires May 3, 2019                  [Page 3]
 
 Internet-Draft                 Wire Image                   October 2018
 
@@ -221,7 +221,7 @@ Internet-Draft                 Wire Image                   October 2018
 
 
 
-Trammell & Kuehlewind    Expires April 28, 2019                 [Page 4]
+Trammell & Kuehlewind      Expires May 3, 2019                  [Page 4]
 
 Internet-Draft                 Wire Image                   October 2018
 
@@ -277,7 +277,7 @@ Internet-Draft                 Wire Image                   October 2018
 
 
 
-Trammell & Kuehlewind    Expires April 28, 2019                 [Page 5]
+Trammell & Kuehlewind      Expires May 3, 2019                  [Page 5]
 
 Internet-Draft                 Wire Image                   October 2018
 
@@ -333,7 +333,7 @@ Internet-Draft                 Wire Image                   October 2018
 
 
 
-Trammell & Kuehlewind    Expires April 28, 2019                 [Page 6]
+Trammell & Kuehlewind      Expires May 3, 2019                  [Page 6]
 
 Internet-Draft                 Wire Image                   October 2018
 
@@ -389,7 +389,7 @@ Internet-Draft                 Wire Image                   October 2018
 
 
 
-Trammell & Kuehlewind    Expires April 28, 2019                 [Page 7]
+Trammell & Kuehlewind      Expires May 3, 2019                  [Page 7]
 
 Internet-Draft                 Wire Image                   October 2018
 
@@ -445,7 +445,7 @@ Authors' Addresses
 
 
 
-Trammell & Kuehlewind    Expires April 28, 2019                 [Page 8]
+Trammell & Kuehlewind      Expires May 3, 2019                  [Page 8]
 
 Internet-Draft                 Wire Image                   October 2018
 
@@ -501,4 +501,4 @@ Internet-Draft                 Wire Image                   October 2018
 
 
 
-Trammell & Kuehlewind    Expires April 28, 2019                 [Page 9]
+Trammell & Kuehlewind      Expires May 3, 2019                  [Page 9]
